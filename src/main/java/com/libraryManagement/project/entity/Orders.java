@@ -3,6 +3,8 @@ package com.libraryManagement.project.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Entity
 @Data
 @Table(name = "orders")
@@ -11,7 +13,7 @@ public class Orders {
     @Id
     @Column(name = "order_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String orderId;
+    private Long orderId;
 
     @Column(name = "total_amount", nullable = false)
     private double totalAmount;
@@ -20,7 +22,18 @@ public class Orders {
     private String status;
     private String paymentId;
 
-    //TODO: userId OneToMany relation
-    @Column(name = "user_id")
-    private String userId;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id",nullable = false)
+    private User user;
+
+    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<OrderItems> orderItems;
+
+    @OneToOne
+    @JoinColumn(name = "order_id")
+    private ShippingAddress shippingAddress;
+
+    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Payments> payments;
 }

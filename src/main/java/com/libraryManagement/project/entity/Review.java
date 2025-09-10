@@ -2,80 +2,33 @@ package com.libraryManagement.project.entity;
 
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 
 @Entity
 @Table(name = "reviews")
+@Data
 public class Review {     // Review table
 
     @Id      //Primary Key
-    @Column(name = "reviewId")
+    @Column(name = "review_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String reviewId;
-
-    @ManyToMany
-    @JoinColumn(name = "userId" , nullable = false)
-    private String userId;
+    private Long reviewId;
 
     @ManyToOne
-    @JoinColumn(name = "bookId", nullable = false)
-    private String bookId;
+    @JoinColumn(name = "user_id" , nullable = false)
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "book_id", nullable = false)
+    private Book bookId;
 
     @Column(name = "rating" , nullable = false)
-    private int rating;
+    private double rating;
 
-    @Column(name = "comment" , nullable = false)
-    private String comment;
+    @Column(name = "content" , nullable = false)
+    private String content;
 
-    public void review() {}
-
-    public Review(String reviewId, String userId, String bookId, int rating, String comment) {
-        this.reviewId = reviewId;
-        this.userId = userId;
-        this.bookId = bookId;
-        this.rating = rating;
-        this.comment = comment;
-    }
-
-    public String getReviewId() {
-        return reviewId;
-    }
-
-    public void setReviewId(String reviewId) {
-        this.reviewId = reviewId;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getBookId() {
-        return bookId;
-    }
-
-    public void setBookId(String bookId) {
-        this.bookId = bookId;
-    }
-
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
 
 
 
