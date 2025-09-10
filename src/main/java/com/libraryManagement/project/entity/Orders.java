@@ -13,10 +13,10 @@ public class Orders {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String orderId;
 
-    @Column(name = "total_amount")
+    @Column(name = "total_amount", nullable = false)
     private double totalAmount;
 
-    @Column(name = "status")
+    @Column(name = "status",nullable = false)
     private String status;
     private String paymentId;
 
