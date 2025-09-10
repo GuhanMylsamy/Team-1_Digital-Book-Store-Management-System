@@ -1,11 +1,10 @@
 package com.libraryManagement.project.entity;
 
-import io.micrometer.core.annotation.Counted;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "cartItems")
-public class cartItems {
+public class CartItems {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,10 +22,10 @@ public class cartItems {
     @JoinColumn(name = "bookId")
     private String bookId;
 
-    public cartItems() {
+    public CartItems() {
     }
 
-    public cartItems(String cartItemId, String cartId, int quantity, String bookId) {
+    public CartItems(String cartItemId, String cartId, int quantity, String bookId) {
         this.cartItemId = cartItemId;
         this.cartId = cartId;
         this.quantity = quantity;
