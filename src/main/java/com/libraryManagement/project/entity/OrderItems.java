@@ -2,6 +2,7 @@ package com.libraryManagement.project.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.query.Order;
 
 import java.util.IdentityHashMap;
 
@@ -13,7 +14,7 @@ public class OrderItems {
     @Id
     @Column(name = "item_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String itemId;
+    private Long itemId;
 
     @Column(name = "quantity", nullable = false)
     private int quantity;
@@ -22,10 +23,12 @@ public class OrderItems {
     private double unitPrice;
 
     //TODO: orderId Relation ManyToOne
-    @Column(name = "order_id")
-    private String orderId;
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Orders orders;
 
     //TODO: bookId Relation ManyToOne
-    @Column(name = "book_id")
-    private String bookId;
+    @ManyToOne
+    @JoinColumn(name = "book_id")
+    private Book bookId;
 }

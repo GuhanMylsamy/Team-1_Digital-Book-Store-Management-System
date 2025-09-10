@@ -1,6 +1,7 @@
 package com.libraryManagement.project.entity;
 
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.Order;
 import lombok.Data;
 
 @Entity
@@ -8,11 +9,11 @@ import lombok.Data;
 @Table(name = "payments")
 public class Payments {
 
-    //TODO: paymentId Relation ManyToOne with orders
+
     @Id
     @Column(name = "payment_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String paymentId;
+    private Long paymentId;
 
     @Column(name = "provider",nullable = false)
     private String provider;
@@ -25,5 +26,8 @@ public class Payments {
 
     @Column(name = "status",nullable = false)
     private String status;
+
+    @ManyToOne
+    private Orders orders;
 
 }
