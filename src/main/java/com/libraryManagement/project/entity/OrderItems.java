@@ -15,10 +15,10 @@ public class OrderItems {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String itemId;
 
-    @Column(name = "quantity")
+    @Column(name = "quantity", nullable = false)
     private int quantity;
 
-    @Column(name = "unit_price")
+    @Column(name = "unit_price",nullable = false)
     private double unitPrice;
 
     //TODO: orderId Relation ManyToOne

@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "Payments")
+@Table(name = "payments")
 public class Payments {
 
     //TODO: paymentId Relation ManyToOne with orders
@@ -14,16 +14,16 @@ public class Payments {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String paymentId;
 
-    @Column(name = "provider")
+    @Column(name = "provider",nullable = false)
     private String provider;
 
-    @Column(name = "provider_ref")
+    @Column(name = "provider_ref",nullable = false)
     private String providerRef;
 
-    @Column(name = "amount")
+    @Column(name = "amount",nullable = false)
     private double amount;
 
-    @Column(name = "status")
+    @Column(name = "status",nullable = false)
     private String status;
 
 }
