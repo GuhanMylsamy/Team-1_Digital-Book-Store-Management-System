@@ -30,5 +30,5 @@ public class OrderItems {
     //TODO: bookId Relation ManyToOne
     @ManyToOne
     @JoinColumn(name = "book_id")
-    private Book bookId;
+    private Book book;
 }
