@@ -11,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/books")
@@ -43,4 +45,11 @@ public class BookController {
         return new ResponseEntity<>(createdBook, HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Map<String, String>> deleteBook(@PathVariable Long id){
+        bookService.deleteBook(id);
+        Map<String, String> response = new HashMap<>();
+        response.put("Message" , "Book deleted successfully");
+        return ResponseEntity.ok(response);
+    }
 }
