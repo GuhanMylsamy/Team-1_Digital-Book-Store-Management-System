@@ -3,11 +3,15 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Entity
 @Table(name = "books")
 @Data
+@NoArgsConstructor
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,4 +43,12 @@ public class Book {
     @Column(name = "image_url")
     private String imageUrl;
 
+    public Book(String title, Author author, Category category, Double price, int stockQuantity, String imageUrl){
+        this.title = title;
+        this.author = author;
+        this.category = category;
+        this.price = price;
+        this.stockQuantity = stockQuantity;
+        this.imageUrl = imageUrl;
+    }
 }

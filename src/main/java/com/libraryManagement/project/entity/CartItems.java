@@ -15,13 +15,12 @@ public class CartItems {
     @Column(name = "cart_item_id")
     private Long cartItemId;
 
-
     @Column(name = "quantity")
-    private int quantity;
+    private Integer quantity = 1;
 
     @ManyToOne
     @JoinColumn(name = "book_id")
-    private Book bookId;
+    private Book book;
 
     @ManyToOne
     @JoinColumn(name = "cart_id", nullable = false)
