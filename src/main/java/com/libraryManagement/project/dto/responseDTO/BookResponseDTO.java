@@ -1,0 +1,30 @@
+package com.libraryManagement.project.dto.responseDTO;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.Data;
+
+@Data
+public class BookResponseDTO {
+    private Long bookId;
+    private String title;
+    private String authorName;
+    private String categoryName;
+    private Double price;
+    private int stockQuantity;
+    private String imageUrl;
+
+    public BookResponseDTO(Long bookId, @NotBlank String title, @NotNull String authorName,
+                           @NotNull String categoryName, @NotNull @Positive Double price,
+                           int stockQuantity, String imageUrl) {
+        this.bookId = bookId;
+        this.title = title;
+        this.authorName = authorName;
+        this.categoryName = categoryName;
+        this.price = price;
+        this.stockQuantity = stockQuantity;
+        this.imageUrl = imageUrl;
+    }
+
+}
