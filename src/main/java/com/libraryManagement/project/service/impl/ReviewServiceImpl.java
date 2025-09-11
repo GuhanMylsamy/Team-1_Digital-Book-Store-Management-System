@@ -1,7 +1,11 @@
 package com.libraryManagement.project.service.impl;
 
+import com.libraryManagement.project.entity.Book;
 import com.libraryManagement.project.entity.Review;
+import com.libraryManagement.project.entity.User;
+import com.libraryManagement.project.repository.BookRepository;
 import com.libraryManagement.project.repository.ReviewRepository;
+import com.libraryManagement.project.repository.UserRepository;
 import com.libraryManagement.project.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +19,12 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Autowired
     private ReviewRepository reviewRepository;
+
+    @Autowired
+    private UserRepository userRepository; // <-- Inject UserRepository
+
+    @Autowired
+    private BookRepository bookRepository;
 
     @Override
     public List<Review> getReviewsForBook(Long bookId) {
