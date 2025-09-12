@@ -4,8 +4,7 @@ package com.libraryManagement.project.controller;
 import com.libraryManagement.project.dto.requestDTO.BookRequestDTO;
 import com.libraryManagement.project.dto.responseDTO.BookResponseDTO;
 import com.libraryManagement.project.service.impl.BookServiceImpl;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/books")
-
 public class BookController {
     private final BookServiceImpl bookService;
 
@@ -39,10 +37,41 @@ public class BookController {
         return ResponseEntity.ok(bookService.getBookById(id));
     }
 
+    @GetMapping("/author/{authorId}")
+    public ResponseEntity<List<BookResponseDTO>> getBooksByAuthor(@PathVariable Long authorId) {
+        return ResponseEntity.ok(bookService.getBooksByAuthor(authorId));
+    }
+
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<List<BookResponseDTO>> getBooksByCategory(@PathVariable Long categoryId) {
+        return ResponseEntity.ok(bookService.getBooksByCategory(categoryId));
+    }
+
     @PostMapping("/addBook")
     public ResponseEntity<BookResponseDTO> addBook(@RequestBody BookRequestDTO bookRequestDTO){
         BookResponseDTO createdBook = bookService.addBook(bookRequestDTO);
         return new ResponseEntity<>(createdBook, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<BookResponseDTO> updateBook(@PathVariable Long id,@Valid @RequestBody BookRequestDTO bookRequestDTO) {
+        BookResponseDTO updatedBook = bookService.updateBook(id, bookRequestDTO);
+        return ResponseEntity.ok(updatedBook);
+    }
+
+    @GetMapping("/findByTitle")
+    public ResponseEntity<List<BookResponseDTO>> findBooksByTitle(@RequestParam String title) {
+        return ResponseEntity.ok(bookService.findBooksByTitle(title));
+    }
+
+    @GetMapping("/findByAuthor")
+    public ResponseEntity<List<BookResponseDTO>> findBooksByAuthor(@RequestParam String authorName) {
+        return ResponseEntity.ok(bookService.findBooksByAuthor(authorName));
+    }
+
+    @GetMapping("/findByCategory")
+    public ResponseEntity<List<BookResponseDTO>> findBooksByCategory(@RequestParam String categoryName) {
+        return ResponseEntity.ok(bookService.findBooksByCategory(categoryName));
     }
 
     @DeleteMapping("/delete/{id}")
@@ -52,4 +81,6 @@ public class BookController {
         response.put("Message" , "Book deleted successfully");
         return ResponseEntity.ok(response);
     }
+
+
 }

@@ -5,11 +5,7 @@ import com.libraryManagement.project.dto.responseDTO.BookResponseDTO;
 import com.libraryManagement.project.entity.*;
 import com.libraryManagement.project.repository.*;
 import com.libraryManagement.project.service.BookService;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -38,9 +34,29 @@ public class BookServiceImpl  implements BookService {
         return convertToResponseDTO(book);
     }
 
-    //optional for now, can be implemented when focusing on filter functionality
+    @Override
     public List getBooksByAuthor(Long authorId) {
-        return bookRepository.findByAuthorAuthorId(authorId);
+        return bookRepository.findByAuthorAuthorId(authorId).stream().map(this::convertToResponseDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public List getBooksByCategory(Long categoryId) {
+        return bookRepository.findByCategoryCategoryId(categoryId).stream().map(this::convertToResponseDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public List findBooksByTitle(String title) {
+        return bookRepository.findByTitleContainingIgnoreCase(title).stream().map(this::convertToResponseDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public List findBooksByAuthor(String authorName) {
+        return bookRepository.findByAuthorNameContainingIgnoreCase(authorName).stream().map(this::convertToResponseDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public List findBooksByCategory(String categoryName) {
+        return bookRepository.findByCategoryNameContainingIgnoreCase(categoryName).stream().map(this::convertToResponseDTO).collect(Collectors.toList());
     }
 
     //TO-DO we can use model mapper in this
