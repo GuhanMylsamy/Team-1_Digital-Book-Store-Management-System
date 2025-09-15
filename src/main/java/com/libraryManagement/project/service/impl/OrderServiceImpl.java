@@ -5,6 +5,7 @@ import com.libraryManagement.project.dto.requestDTO.OrderRequestDTO;
 import com.libraryManagement.project.dto.responseDTO.OrderItemResponseDTO;
 import com.libraryManagement.project.dto.responseDTO.OrderResponseDTO;
 import com.libraryManagement.project.entity.*;
+import com.libraryManagement.project.exception.ResourceNotFound;
 import com.libraryManagement.project.repository.*;
 import com.libraryManagement.project.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,38 +19,44 @@ import java.util.stream.Collectors;
 @Service
 public class OrderServiceImpl implements OrderService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final CartRepository cartRepository;
+    private final CartItemsRepository cartItemsRepository;
+    private final OrdersRepository ordersRepository;
+    private final OrderItemsRepository orderItemsRepository;
+    private final ShippingAddressRepository shippingAddressRepository;
 
     @Autowired
-    private CartRepository cartRepository;
-
-    @Autowired
-    private CartItemsRepository cartItemsRepository;
-
-    @Autowired
-    private BookRepository bookRepository;
-
-    @Autowired
-    private InventoryRepository inventoryRepository;
-
-    @Autowired
-    private OrdersRepository ordersRepository;
-
-    @Autowired
-    private OrderItemsRepository orderItemsRepository;
+    public OrderServiceImpl(UserRepository userRepository, CartRepository cartRepository, CartItemsRepository cartItemsRepository, OrdersRepository ordersRepository, OrderItemsRepository orderItemsRepository, ShippingAddressRepository shippingAddressRepository) {
+        this.userRepository = userRepository;
+        this.cartRepository = cartRepository;
+        this.cartItemsRepository = cartItemsRepository;
+        this.ordersRepository = ordersRepository;
+        this.orderItemsRepository = orderItemsRepository;
+        this.shippingAddressRepository = shippingAddressRepository;
+    }
 
     @Override
     public OrderResponseDTO placeOrder(OrderRequestDTO orderRequestDTO){
-        User user = userRepository.findById(orderRequestDTO.getUserId()).get();
-        Cart cart = cartRepository.findById(orderRequestDTO.getCartId()).get();
+        User user = userRepository.findById(orderRequestDTO.getUserId())
+                .orElseThrow(() -> new ResourceNotFound("User does not exist"));
 
+        Cart cart = cartRepository.findById(orderRequestDTO.getCartId())
+                .orElseThrow(() -> new ResourceNotFound("Cart does not exist"));
+
+
+        ShippingAddress address = shippingAddressRepository.findById(orderRequestDTO.getAddressId())
+                .orElseThrow(() -> new ResourceNotFound("Address does not exist"));
+
+        //TODO: Exception handling
         List<CartItems> cartItems = cartItemsRepository.findCartItemsByCartId(cart.getCartId());
 
         Order order = new Order();
         order.setUser(user);
         order.setStatus("PLACED");
         order.setPaymentId("1");
+        order.setAddress(address);
+
 
         double totalAmount = 0.0;
         List<OrderItems> orderItems = new ArrayList<>();
@@ -95,6 +102,7 @@ public class OrderServiceImpl implements OrderService {
         OrderResponseDTO response = new OrderResponseDTO();
         response.setOrderId(order.getOrderId());
         response.setUserId(order.getUser().getUserId());
+        response.setAddressId(order.getAddress().getAddressId());
         response.setTotalAmount(order.getTotalAmount());
         response.setPlacedAt(LocalDateTime.now());
         response.setItems(itemDTOs);

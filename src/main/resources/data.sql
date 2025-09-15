@@ -1,12 +1,12 @@
 -- 👤 USERS
-INSERT INTO users (user_id, email, full_name, password, role)
-VALUES (1, 'alice@example.com', 'Alice Sharma', 'pass123', 'USER');
+INSERT INTO users (user_id, email, full_name, new_password, old_password, password, role)
+VALUES (1, 'alice@example.com', 'Alice Sharma', 'newpass123', 'oldpass123', 'pass123', 'USER');
 
-INSERT INTO users (user_id, email, full_name, password, role)
-VALUES (2, 'rahul@example.com', 'Rahul Verma', 'pass456', 'USER');
+INSERT INTO users (user_id, email, full_name, new_password, old_password, password, role)
+VALUES (2, 'rahul@example.com', 'Rahul Verma', 'newpass456', 'oldpass456', 'pass456', 'USER');
 
-INSERT INTO users (user_id, email, full_name, password, role)
-VALUES (3, 'admin@example.com', 'Admin User', 'adminpass', 'ADMIN');
+INSERT INTO users (user_id, email, full_name, new_password, old_password, password, role)
+VALUES (3, 'admin@example.com', 'Admin User', 'newadminpass', 'oldadminpass', 'adminpass', 'ADMIN');
 
 -- 🖋️ AUTHORS
 INSERT INTO authors (AuthorID, Name)
@@ -95,12 +95,24 @@ VALUES (1, 'Razorpay', 'RP123', 1449.48, 'PAID', 1);
 INSERT INTO payments (payment_id, provider, provider_ref, amount, status, order_order_id)
 VALUES (2, 'Paytm', 'PT456', 599.00, 'PAID', 2);
 
--- 🏠 SHIPPING ADDRESS
-INSERT INTO shipping_address (shipping_id, address_line1, address_line2, city, country, full_name, phone, postal_code, state, order_order_id)
-VALUES (1, '123 MG Road', 'Near Town Hall', 'Coimbatore', 'India', 'Alice Sharma', '9876543210', '641001', 'TN', 1);
+-- 🏠 SHIPPING ADDRESSES
+INSERT INTO shipping_address (
+  shipping_id, address_line1, address_line2, city, country,
+  full_name, phone, postal_code, state, address
+)
+VALUES (
+  1, '123 MG Road', 'Near Town Hall', 'Coimbatore', 'India',
+  'Alice Sharma', '9876543210', '641001', 'TN', 1
+);
 
-INSERT INTO shipping_address (shipping_id, address_line1, address_line2, city, country, full_name, phone, postal_code, state, order_order_id)
-VALUES (2, '456 Anna Nagar', 'Opposite Park', 'Chennai', 'India', 'Rahul Verma', '9123456780', '600040', 'TN', 2);
+INSERT INTO shipping_address (
+  shipping_id, address_line1, address_line2, city, country,
+  full_name, phone, postal_code, state, address
+)
+VALUES (
+  2, '456 Anna Nagar', 'Opposite Park', 'Chennai', 'India',
+  'Rahul Verma', '9123456780', '600040', 'TN', 2
+);
 
 -- 📝 REVIEWS
 INSERT INTO reviews (review_id, user_id, book_id, rating, content)

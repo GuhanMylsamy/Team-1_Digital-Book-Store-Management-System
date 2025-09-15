@@ -32,10 +32,10 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<OrderItems> orderItems;
 
-    @OneToOne
-    @JoinColumn(name = "order_id")
-    private ShippingAddress shippingAddress;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Payments> payments;
+
+    @OneToOne
+    private ShippingAddress address;
 }
