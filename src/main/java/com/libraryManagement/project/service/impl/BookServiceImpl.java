@@ -163,7 +163,7 @@ public class BookServiceImpl  implements BookService {
 
         // Check if the book is associated with any existing orders
         // If it is, mark the book as inactive instead of deleting it
-        boolean isInOrders = orderItemsRepository.existsByBookId(book.getId());
+        boolean isInOrders = orderItemsRepository.existsByBookId(book.getBookId());
         if (isInOrders) {
             book.setActive(false);
             bookRepository.save(book);
@@ -181,7 +181,7 @@ public class BookServiceImpl  implements BookService {
     }
 
     private void removeBookFromAllCarts(Long bookId) {
-        List<CartItems> cartItems = cartItemsRepository.findByBookId(bookId);
+        List<CartItems> cartItems = cartItemsRepository.findBookByBookId(bookId);
         for (CartItems item : cartItems) {
             Cart cart = item.getCart();
             cart.removeCartItem(item);

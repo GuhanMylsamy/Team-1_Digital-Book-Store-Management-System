@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Entity
-@Table(name = "cartItems")
+@Table(name = "cart_items")
 @Data
 public class CartItems {
 

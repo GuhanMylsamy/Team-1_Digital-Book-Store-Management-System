@@ -2,9 +2,6 @@ package com.libraryManagement.project.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.query.Order;
-
-import java.util.IdentityHashMap;
 
 @Entity
 @Data
@@ -25,7 +22,7 @@ public class OrderItems {
     //TODO: orderId Relation ManyToOne
     @ManyToOne
     @JoinColumn(name = "order_id")
-    private Orders orders;
+    private Order order;
 
     //TODO: bookId Relation ManyToOne
     @ManyToOne
