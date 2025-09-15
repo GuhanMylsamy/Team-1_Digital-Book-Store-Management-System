@@ -35,7 +35,7 @@ public class User {
 
     // Relationships
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Orders> orders;
+    private List<Order> orders;
 
 
 }

@@ -8,7 +8,7 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = "orders")
-public class Orders {
+public class Order {
 
     @Id
     @Column(name = "order_id")
@@ -20,6 +20,8 @@ public class Orders {
 
     @Column(name = "status",nullable = false)
     private String status;
+
+    @Column(name = "payment_id", nullable = false)
     private String paymentId;
 
 
@@ -27,13 +29,13 @@ public class Orders {
     @JoinColumn(name = "user_id",nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<OrderItems> orderItems;
 
     @OneToOne
     @JoinColumn(name = "order_id")
     private ShippingAddress shippingAddress;
 
-    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Payments> payments;
 }
