@@ -40,5 +40,5 @@ public class ShippingAddress {
     // Relationships
 
     @OneToOne
-    private Orders orders;
+    private Order order;
 }
