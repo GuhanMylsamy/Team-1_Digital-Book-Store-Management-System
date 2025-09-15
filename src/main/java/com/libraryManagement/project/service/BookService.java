@@ -38,7 +38,7 @@ public interface BookService {
     }
 
     default BookResponseDTO convertToResponseDTO(Book book) {
-        return new BookResponseDTO(book.getId(), book.getTitle(), book.getAuthor().getName(), book.getCategory().getName(), book.getPrice(), book.getStockQuantity(),book.getImageUrl());
+        return new BookResponseDTO(book.getBookId(), book.getTitle(), book.getAuthor().getName(), book.getCategory().getName(), book.getPrice(), book.getStockQuantity(),book.getImageUrl());
     }
 }
 

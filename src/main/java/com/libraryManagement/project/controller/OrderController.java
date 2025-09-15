@@ -1,8 +1,10 @@
 package com.libraryManagement.project.controller;
 
+import com.libraryManagement.project.dto.requestDTO.BuyNowRequestDTO;
 import com.libraryManagement.project.dto.requestDTO.OrderRequestDTO;
 import com.libraryManagement.project.dto.responseDTO.OrderResponseDTO;
 import com.libraryManagement.project.service.impl.OrderServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,4 +25,13 @@ public class OrderController {
         OrderResponseDTO orderResponseDTO = orderService.placeOrder(orderRequestDTO);
         return new ResponseEntity<>(orderResponseDTO, HttpStatus.CREATED);
     }
+
+    @PostMapping("/orders/buy-now")
+    public ResponseEntity<OrderResponseDTO> buyNow(@RequestBody BuyNowRequestDTO buyNowRequestDTO){
+        OrderResponseDTO orderResponseDTO = orderService.buyNow(buyNowRequestDTO);
+        return new ResponseEntity<>(orderResponseDTO, HttpStatus.CREATED);
+    }
+
+
+
 }

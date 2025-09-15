@@ -2,6 +2,7 @@ package com.libraryManagement.project.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.mapping.Join;
 
 @Entity
 @Table(name = "shipping_address")
@@ -11,7 +12,7 @@ public class ShippingAddress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "shipping_id")
-    private Long id;
+    private Long addressId;
 
     @Column(name = "address_line1",length = 100)
     private String addressLine1;
@@ -38,7 +39,7 @@ public class ShippingAddress {
     private String state;
 
     // Relationships
-
-    @OneToOne
-    private Order order;
+    @ManyToOne
+    @JoinColumn(name = "address")
+    private User user;
 }

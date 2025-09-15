@@ -4,7 +4,7 @@ import com.libraryManagement.project.dto.requestDTO.InventoryRequestDTO;
 import com.libraryManagement.project.dto.responseDTO.InventoryResponseDTO;
 import com.libraryManagement.project.service.impl.InventoryServiceImpl;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+//import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
