@@ -16,6 +16,14 @@ public interface BookService {
 
     List<BookResponseDTO> getBooksByAuthor(Long authorId);
 
+    List<BookResponseDTO> getBooksByCategory(Long categoryId);
+
+    List<BookResponseDTO> findBooksByTitle(String title);
+
+    List<BookResponseDTO> findBooksByAuthor(String authorName);
+
+    List<BookResponseDTO> findBooksByCategory(String categoryName);
+
     @Transactional
     BookResponseDTO addBook(BookRequestDTO bookRequestDTO);
 
