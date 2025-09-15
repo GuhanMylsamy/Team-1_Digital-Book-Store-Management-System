@@ -1,5 +1,6 @@
 package com.libraryManagement.project.service.impl;
 
+import com.libraryManagement.project.dto.requestDTO.BuyNowRequestDTO;
 import com.libraryManagement.project.dto.requestDTO.OrderItemRequestDTO;
 import com.libraryManagement.project.dto.requestDTO.OrderRequestDTO;
 import com.libraryManagement.project.dto.responseDTO.OrderItemResponseDTO;
@@ -25,15 +26,17 @@ public class OrderServiceImpl implements OrderService {
     private final OrdersRepository ordersRepository;
     private final OrderItemsRepository orderItemsRepository;
     private final ShippingAddressRepository shippingAddressRepository;
+    private final BookRepository bookRepository;
 
     @Autowired
-    public OrderServiceImpl(UserRepository userRepository, CartRepository cartRepository, CartItemsRepository cartItemsRepository, OrdersRepository ordersRepository, OrderItemsRepository orderItemsRepository, ShippingAddressRepository shippingAddressRepository) {
+    public OrderServiceImpl(UserRepository userRepository, CartRepository cartRepository, CartItemsRepository cartItemsRepository, OrdersRepository ordersRepository, OrderItemsRepository orderItemsRepository, ShippingAddressRepository shippingAddressRepository, BookRepository bookRepository) {
         this.userRepository = userRepository;
         this.cartRepository = cartRepository;
         this.cartItemsRepository = cartItemsRepository;
         this.ordersRepository = ordersRepository;
         this.orderItemsRepository = orderItemsRepository;
         this.shippingAddressRepository = shippingAddressRepository;
+        this.bookRepository = bookRepository;
     }
 
     @Override
@@ -87,12 +90,54 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
+    @Override
+    public OrderResponseDTO buyNow(BuyNowRequestDTO buyNowRequestDTO){
+        User user = userRepository.findById(buyNowRequestDTO.getUserId())
+                .orElseThrow(() -> new ResourceNotFound("User does not exist"));
+
+        ShippingAddress address = shippingAddressRepository.findById(buyNowRequestDTO.getAddressId())
+                .orElseThrow(() -> new ResourceNotFound("Address does not exist"));
+
+        Book book = bookRepository.findById(buyNowRequestDTO.getAddressId())
+                .orElseThrow(() -> new ResourceNotFound("Book does not exist"));
+
+        int quantity = buyNowRequestDTO.getQuantity();
+        double price = book.getPrice();
+
+        OrderItems orderItem = new OrderItems();
+        orderItem.setBook(book);
+        orderItem.setQuantity(quantity);
+        orderItem.setUnitPrice(price);
+
+        Order order = new Order();
+        order.setUser(user);
+        order.setStatus("PLACED");
+        order.setPaymentId("1");
+        order.setAddress(address);
+        order.setTotalAmount(price);
+
+        List<OrderItems> orderItems = new ArrayList<>();
+
+        orderItem.setOrder(order);
+        orderItems.add(orderItem);
+
+        order.setOrderItems(orderItems);
+
+        ordersRepository.save(order);
+        orderItemsRepository.saveAll(orderItems);
+
+        return mapToOrderResponseDTO(order,orderItems);
+
+
+
+    }
+
     private OrderResponseDTO mapToOrderResponseDTO(Order order, List<OrderItems> orderItems) {
 
         List<OrderItemResponseDTO> itemDTOs = orderItems.stream().map(item -> {
             OrderItemResponseDTO dto = new OrderItemResponseDTO();
             dto.setOrderItemId(item.getItemId());
-            dto.setItemId(item.getBook().getId());
+            dto.setItemId(item.getBook().getBookId());
             dto.setItemName(item.getBook().getTitle());
             dto.setQuantity(item.getQuantity());
             dto.setPrice(item.getUnitPrice());
