@@ -42,6 +42,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponseDTO placeOrder(OrderRequestDTO orderRequestDTO){
+
+        //Fetch User, Cart, ShippingAddress Object from database using their IDs
+
         User user = userRepository.findById(orderRequestDTO.getUserId())
                 .orElseThrow(() -> new ResourceNotFound("User does not exist"));
 
@@ -58,6 +61,7 @@ public class OrderServiceImpl implements OrderService {
             throw new ResourceNotFound("Cart is empty");
         }
 
+        //Creating Order object
         Order order = new Order();
         order.setUser(user);
         order.setStatus(OrderStatus.PLACED);
@@ -68,10 +72,12 @@ public class OrderServiceImpl implements OrderService {
         double totalAmount = 0.0;
         List<OrderItems> orderItems = new ArrayList<>();
 
+        //Calculating total cost for all items
         totalAmount = cartItems.stream()
                 .mapToDouble(cartItem -> cartItem.getBook().getPrice() * cartItem.getQuantity())
                 .sum();
 
+        //Mapping cartItems to orderItems
         orderItems = cartItems.stream()
                 .map(cartItem -> {
                     OrderItems orderItem = new OrderItems();
@@ -97,6 +103,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponseDTO buyNow(BuyNowRequestDTO buyNowRequestDTO){
+
+        //Fetch User, Cart, ShippingAddress Object from database using their IDs
+
         User user = userRepository.findById(buyNowRequestDTO.getUserId())
                 .orElseThrow(() -> new ResourceNotFound("User does not exist"));
 
@@ -109,11 +118,13 @@ public class OrderServiceImpl implements OrderService {
         int quantity = buyNowRequestDTO.getQuantity();
         double price = book.getPrice();
 
+        //Creating orderItem object
         OrderItems orderItem = new OrderItems();
         orderItem.setBook(book);
         orderItem.setQuantity(quantity);
         orderItem.setUnitPrice(price);
 
+        //Creating Order Object
         Order order = new Order();
         order.setUser(user);
         order.setStatus(OrderStatus.PLACED);
@@ -139,6 +150,7 @@ public class OrderServiceImpl implements OrderService {
 
     private OrderResponseDTO mapToOrderResponseDTO(Order order, List<OrderItems> orderItems) {
 
+        //Mapping orderItems to OrderItemResponseDTO
         List<OrderItemResponseDTO> itemDTOs = orderItems.stream().map(item -> {
             OrderItemResponseDTO dto = new OrderItemResponseDTO();
             dto.setOrderItemId(item.getItemId());
@@ -149,6 +161,7 @@ public class OrderServiceImpl implements OrderService {
             return dto;
         }).collect(Collectors.toList());
 
+        //Mapping Order to OrderResponseDTO
         OrderResponseDTO response = new OrderResponseDTO();
         response.setOrderId(order.getOrderId());
         response.setUserId(order.getUser().getUserId());
