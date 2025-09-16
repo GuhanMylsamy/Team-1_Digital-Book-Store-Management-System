@@ -4,6 +4,7 @@ import com.libraryManagement.project.dto.requestDTO.InventoryRequestDTO;
 import com.libraryManagement.project.dto.responseDTO.InventoryResponseDTO;
 import com.libraryManagement.project.entity.Book;
 import com.libraryManagement.project.entity.Inventory;
+import com.libraryManagement.project.exception.BookNotFoundException;
 import com.libraryManagement.project.repository.BookRepository;
 import com.libraryManagement.project.repository.InventoryRepository;
 import com.libraryManagement.project.service.InventoryService;
@@ -35,7 +36,7 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     public InventoryResponseDTO getInventoryById(Long id) {
         Inventory inventory = inventoryRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Book inventory for requested id is not available."));
+                .orElseThrow(() -> new BookNotFoundException("Book inventory for requested id is not available."));
         return convertToResponseDTO(inventory);
     }
 
@@ -43,7 +44,7 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     public void updateStockQuantity(Long bookId, InventoryRequestDTO requestDTO){
         Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new IllegalArgumentException("Inventory with requested book is not found!"));
+                .orElseThrow(() -> new BookNotFoundException("Inventory with requested book is not found!"));
         if (requestDTO.getStockQuantity()>=0){
             inventoryRepository.findByBook(book).ifPresent(inventory -> {
                 inventory.setStockQuantity(requestDTO.getStockQuantity());
