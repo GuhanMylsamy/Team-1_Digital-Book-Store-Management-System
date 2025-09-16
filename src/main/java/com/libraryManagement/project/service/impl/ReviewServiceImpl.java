@@ -2,6 +2,7 @@ package com.libraryManagement.project.service.impl;
 
 import com.libraryManagement.project.dto.responseDTO.ReviewResponseDTO;
 import com.libraryManagement.project.entity.Review;
+import com.libraryManagement.project.exception.ResourceNotFoundException;
 import com.libraryManagement.project.repository.BookRepository;
 import com.libraryManagement.project.repository.ReviewRepository;
 import com.libraryManagement.project.repository.UserRepository;
@@ -58,7 +59,16 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Optional<Review> getReviewById(Long reviewId) {
-        return reviewRepository.findById(reviewId);
+    public void deleteReviewByAdmin(Long reviewId) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new ResourceNotFoundException("Review not found!"));
+        reviewRepository.delete(review);
     }
+
+//    @Override
+//    public Optional<Review> getReviewById(Long reviewId) {
+//        return reviewRepository.findById(reviewId);
+//    }
+
+
 }
