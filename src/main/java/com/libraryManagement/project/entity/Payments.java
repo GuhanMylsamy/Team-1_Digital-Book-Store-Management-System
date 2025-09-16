@@ -1,7 +1,6 @@
 package com.libraryManagement.project.entity;
 
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.Order;
 import lombok.Data;
 
 @Entity
@@ -28,6 +27,6 @@ public class Payments {
     private String status;
 
     @ManyToOne
-    private Orders orders;
+    private Order order;
 
 }

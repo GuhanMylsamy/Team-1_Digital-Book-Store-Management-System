@@ -3,10 +3,12 @@ package com.libraryManagement.project.service.impl;
 import com.libraryManagement.project.dto.requestDTO.BookRequestDTO;
 import com.libraryManagement.project.dto.responseDTO.BookResponseDTO;
 import com.libraryManagement.project.entity.*;
+import com.libraryManagement.project.exception.BookNotFoundException;
 import com.libraryManagement.project.repository.*;
 import com.libraryManagement.project.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,7 +32,7 @@ public class BookServiceImpl  implements BookService {
 
     @Override
     public BookResponseDTO getBookById(Long id){
-        Book book = bookRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("not found"));
+        Book book = bookRepository.findById(id).orElseThrow(()-> new BookNotFoundException("not found"));
         return convertToResponseDTO(book);
     }
 
@@ -106,13 +108,13 @@ public class BookServiceImpl  implements BookService {
         return convertToResponseDTO(savedBook);
     }
 
-    //Need to convert the existing exception to custom BookNotFoundException
+    @Transactional
     @Override
     public BookResponseDTO updateBook(Long id, BookRequestDTO bookRequestDTO) {
         // Retrieve the existing book by ID
         // If the book is not found, throw an exception
         Book book = bookRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Book not found!"));
+                .orElseThrow(() -> new BookNotFoundException("Book not found!"));
 
         // Find or create the author by name
         // If the author doesn't exist, create a new one and save it
@@ -154,16 +156,17 @@ public class BookServiceImpl  implements BookService {
         return convertToResponseDTO(updatedBook);
     }
 
+    @Transactional
     @Override
     public void deleteBook(Long id) {
         // Retrieve the book by its ID
         // If the book is not found, throw a custom BookNotFoundException
         Book book = bookRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Book not found!"));
+                .orElseThrow(() -> new BookNotFoundException("Book not found!"));
 
         // Check if the book is associated with any existing orders
         // If it is, mark the book as inactive instead of deleting it
-        boolean isInOrders = orderItemsRepository.existsByBookId(book.getId());
+        boolean isInOrders = orderItemsRepository.existsByBookId(book.getBookId());
         if (isInOrders) {
             book.setActive(false);
             bookRepository.save(book);
@@ -181,7 +184,7 @@ public class BookServiceImpl  implements BookService {
     }
 
     private void removeBookFromAllCarts(Long bookId) {
-        List<CartItems> cartItems = cartItemsRepository.findByBookId(bookId);
+        List<CartItems> cartItems = cartItemsRepository.findBookByBookId(bookId);
         for (CartItems item : cartItems) {
             Cart cart = item.getCart();
             cart.removeCartItem(item);
