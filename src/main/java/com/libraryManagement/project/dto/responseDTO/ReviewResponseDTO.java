@@ -31,7 +31,7 @@ public class ReviewResponseDTO {
         dto.setReviewerName(review.getUser().getFullName());
         dto.setComment(review.getContent());
         dto.setRating(review.getRating());
-        dto.setBookId( review.getBook().getId());
+        dto.setBookId( review.getBook().getBookId());
         return dto;
     }
 }

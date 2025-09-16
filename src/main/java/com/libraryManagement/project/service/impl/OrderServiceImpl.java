@@ -1,13 +1,12 @@
 package com.libraryManagement.project.service.impl;
 
 import com.libraryManagement.project.dto.requestDTO.BuyNowRequestDTO;
-import com.libraryManagement.project.dto.requestDTO.OrderItemRequestDTO;
 import com.libraryManagement.project.dto.requestDTO.OrderRequestDTO;
 import com.libraryManagement.project.dto.responseDTO.OrderItemResponseDTO;
 import com.libraryManagement.project.dto.responseDTO.OrderResponseDTO;
 import com.libraryManagement.project.entity.*;
 import com.libraryManagement.project.enums.OrderStatus;
-import com.libraryManagement.project.exception.ResourceNotFound;
+import com.libraryManagement.project.exception.ResourceNotFoundException;
 import com.libraryManagement.project.repository.*;
 import com.libraryManagement.project.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,19 +45,19 @@ public class OrderServiceImpl implements OrderService {
         //Fetch User, Cart, ShippingAddress Object from database using their IDs
 
         User user = userRepository.findById(orderRequestDTO.getUserId())
-                .orElseThrow(() -> new ResourceNotFound("User does not exist"));
+                .orElseThrow(() -> new ResourceNotFoundException("User does not exist"));
 
         Cart cart = cartRepository.findById(orderRequestDTO.getCartId())
-                .orElseThrow(() -> new ResourceNotFound("Cart does not exist"));
+                .orElseThrow(() -> new ResourceNotFoundException("Cart does not exist"));
 
 
         ShippingAddress address = shippingAddressRepository.findById(orderRequestDTO.getAddressId())
-                .orElseThrow(() -> new ResourceNotFound("Address does not exist"));
+                .orElseThrow(() -> new ResourceNotFoundException("Address does not exist"));
 
         List<CartItems> cartItems = cartItemsRepository.findCartItemsByCartId(cart.getCartId());
 
         if(cartItems.isEmpty()){
-            throw new ResourceNotFound("Cart is empty");
+            throw new ResourceNotFoundException("Cart is empty");
         }
 
         //Creating Order object
@@ -107,13 +106,13 @@ public class OrderServiceImpl implements OrderService {
         //Fetch User, Cart, ShippingAddress Object from database using their IDs
 
         User user = userRepository.findById(buyNowRequestDTO.getUserId())
-                .orElseThrow(() -> new ResourceNotFound("User does not exist"));
+                .orElseThrow(() -> new ResourceNotFoundException("User does not exist"));
 
         ShippingAddress address = shippingAddressRepository.findById(buyNowRequestDTO.getAddressId())
-                .orElseThrow(() -> new ResourceNotFound("Address does not exist"));
+                .orElseThrow(() -> new ResourceNotFoundException("Address does not exist"));
 
         Book book = bookRepository.findById(buyNowRequestDTO.getAddressId())
-                .orElseThrow(() -> new ResourceNotFound("Book does not exist"));
+                .orElseThrow(() -> new ResourceNotFoundException("Book does not exist"));
 
         int quantity = buyNowRequestDTO.getQuantity();
         double price = book.getPrice();
