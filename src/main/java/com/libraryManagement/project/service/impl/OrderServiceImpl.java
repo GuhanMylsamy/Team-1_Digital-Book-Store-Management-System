@@ -51,8 +51,11 @@ public class OrderServiceImpl implements OrderService {
         ShippingAddress address = shippingAddressRepository.findById(orderRequestDTO.getAddressId())
                 .orElseThrow(() -> new ResourceNotFound("Address does not exist"));
 
-        //TODO: Exception handling
         List<CartItems> cartItems = cartItemsRepository.findCartItemsByCartId(cart.getCartId());
+
+        if(cartItems.isEmpty()){
+            throw new ResourceNotFound("Cart is empty");
+        }
 
         Order order = new Order();
         order.setUser(user);
@@ -63,20 +66,21 @@ public class OrderServiceImpl implements OrderService {
 
         double totalAmount = 0.0;
         List<OrderItems> orderItems = new ArrayList<>();
-        //TODO: use streamapi
-        for(CartItems cartItem : cartItems){
-            Book book = cartItem.getBook();
-            int quantity = cartItem.getQuantity();
-            double price = book.getPrice();
-            totalAmount += price * quantity;
 
-            OrderItems orderItem = new OrderItems();
-            orderItem.setBook(book);
-            orderItem.setQuantity(quantity);
-            orderItem.setUnitPrice(price);
-            orderItem.setOrder(order);
-            orderItems.add(orderItem);
-        }
+        totalAmount = cartItems.stream()
+                .mapToDouble(cartItem -> cartItem.getBook().getPrice() * cartItem.getQuantity())
+                .sum();
+
+        orderItems = cartItems.stream()
+                .map(cartItem -> {
+                    OrderItems orderItem = new OrderItems();
+                    orderItem.setBook(cartItem.getBook());
+                    orderItem.setQuantity(cartItem.getQuantity());
+                    orderItem.setUnitPrice(cartItem.getBook().getPrice());
+                    orderItem.setOrder(order);
+                    return orderItem;
+                })
+                .collect(Collectors.toList());
 
         order.setTotalAmount(totalAmount);
         order.setOrderItems(orderItems);
