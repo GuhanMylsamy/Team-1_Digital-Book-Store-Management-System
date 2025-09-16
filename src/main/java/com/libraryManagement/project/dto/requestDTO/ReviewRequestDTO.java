@@ -9,6 +9,8 @@ import lombok.Data;
 
 @Data
 public class ReviewRequestDTO {
+    @NotNull
+    private Long userId;
 
     @NotNull(message = "Comment cannot be empty")
     @Size(min = 10 , message = "Comment should be at least 10 characters long")
