@@ -1,6 +1,6 @@
 package com.libraryManagement.project.service.impl;
 import com.libraryManagement.project.entity.Author;
-import com.libraryManagement.project.exception.ResourceNotFound;
+import com.libraryManagement.project.exception.ResourceNotFoundException;
 import com.libraryManagement.project.repository.AuthorRepository;
 import com.libraryManagement.project.repository.BookRepository;
 import com.libraryManagement.project.service.AuthorService;
@@ -28,7 +28,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public Author getAuthorById(Long id) {
         return authorRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFound("Author not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Author not found!"));
     }
 
     @Override
@@ -37,7 +37,7 @@ public class AuthorServiceImpl implements AuthorService {
         if(author.isPresent()) {
             return author.get();
         }else{
-            throw new ResourceNotFound("Author not found!");
+            throw new ResourceNotFoundException("Author not found!");
         }
     }
 
@@ -66,7 +66,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public ResponseEntity<String> deleteAuthor(Long id) {
         if (!authorRepository.existsById(id)) {
-            throw new ResourceNotFound("Author not found!");
+            throw new ResourceNotFoundException("Author not found!");
         }
         else if (bookRepository.existsByAuthor_AuthorId(id)) {
             throw new IllegalArgumentException("Author name is used by other books, Deletion is not supported.");
