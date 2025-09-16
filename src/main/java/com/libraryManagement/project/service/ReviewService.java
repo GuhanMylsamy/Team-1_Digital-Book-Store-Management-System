@@ -19,10 +19,14 @@ public interface ReviewService {
     ReviewResponseDTO createReview(Review review);
 
     //Delete Review
+    @Transactional
     boolean deleteReview(Long reviewId);
 
-    //Search for any review by its reviewId
-    Optional<Review> getReviewById(Long reviewId);
+    @Transactional
+    void deleteReviewByAdmin(Long reviewId);
+
+//    //Search for any review by its reviewId
+//    Optional<Review> getReviewById(Long reviewId);
 
 
 }
