@@ -10,16 +10,6 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<String> handleAccessDeniedException(AccessDeniedException ex) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("""
-            {
-              "status": "FORBIDDEN",
-              "message": "Access denied: You don’t have permission to perform this action."
-            }
-            """);
-    }
-
     @ExceptionHandler(ResourceNotFound.class)
     public ResponseEntity<?> handleNotFound(ResourceNotFound ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
