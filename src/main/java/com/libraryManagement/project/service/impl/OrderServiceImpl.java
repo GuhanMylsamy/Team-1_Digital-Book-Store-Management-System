@@ -6,6 +6,7 @@ import com.libraryManagement.project.dto.requestDTO.OrderRequestDTO;
 import com.libraryManagement.project.dto.responseDTO.OrderItemResponseDTO;
 import com.libraryManagement.project.dto.responseDTO.OrderResponseDTO;
 import com.libraryManagement.project.entity.*;
+import com.libraryManagement.project.enums.OrderStatus;
 import com.libraryManagement.project.exception.ResourceNotFound;
 import com.libraryManagement.project.repository.*;
 import com.libraryManagement.project.service.OrderService;
@@ -59,7 +60,7 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = new Order();
         order.setUser(user);
-        order.setStatus("PLACED");
+        order.setStatus(OrderStatus.PLACED);
         order.setPaymentId("1");
         order.setAddress(address);
 
@@ -115,7 +116,7 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = new Order();
         order.setUser(user);
-        order.setStatus("PLACED");
+        order.setStatus(OrderStatus.PLACED);
         order.setPaymentId("1");
         order.setAddress(address);
         order.setTotalAmount(price);
