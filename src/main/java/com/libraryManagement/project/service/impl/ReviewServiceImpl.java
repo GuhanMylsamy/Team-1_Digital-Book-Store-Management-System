@@ -1,8 +1,8 @@
 package com.libraryManagement.project.service.impl;
 
-import com.libraryManagement.project.entity.Book;
+import com.libraryManagement.project.dto.responseDTO.ReviewResponseDTO;
 import com.libraryManagement.project.entity.Review;
-import com.libraryManagement.project.entity.User;
+import com.libraryManagement.project.exception.ResourceNotFoundException;
 import com.libraryManagement.project.repository.BookRepository;
 import com.libraryManagement.project.repository.ReviewRepository;
 import com.libraryManagement.project.repository.UserRepository;
@@ -10,9 +10,9 @@ import com.libraryManagement.project.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
@@ -21,18 +21,22 @@ public class ReviewServiceImpl implements ReviewService {
     private ReviewRepository reviewRepository;
 
     @Autowired
-    private UserRepository userRepository; // <-- Inject UserRepository
+    private UserRepository userRepository;
 
     @Autowired
     private BookRepository bookRepository;
 
     @Override
-    public List<Review> getReviewsForBook(Long bookId) {
-        return reviewRepository.findByBookId(bookId);
+    public List<ReviewResponseDTO> getAllReviews(Long bookId) {
+        List<Review> reviews = reviewRepository.findByBookId(bookId);
+        return reviews.stream()
+                .map(review -> new ReviewResponseDTO().reviewResponseDTOMapper(review))
+                .collect(Collectors.toList());
     }
 
+
     @Override
-    public Review createReview(Review review) {
+    public ReviewResponseDTO createReview(Review review) {
         if(review.getRating()  < 1 || review.getRating() > 5) {
             throw new IllegalArgumentException("Rating should be between 1 - 5");
         }
@@ -40,8 +44,9 @@ public class ReviewServiceImpl implements ReviewService {
             throw new IllegalArgumentException("Comment cannot be Empty");
         }
         //SToring and saving contents here
-        review.setContent(review.getContent());
-        return reviewRepository.save(review);
+        Review savedReview = reviewRepository.save(review);
+        return ReviewResponseDTO.reviewResponseDTOMapper(savedReview);
+
     }
 
     @Override
@@ -54,7 +59,16 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Optional<Review> getReviewById(Long reviewId) {
-        return reviewRepository.findById(reviewId);
+    public void deleteReviewByAdmin(Long reviewId) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new ResourceNotFoundException("Review not found!"));
+        reviewRepository.delete(review);
     }
+
+//    @Override
+//    public Optional<Review> getReviewById(Long reviewId) {
+//        return reviewRepository.findById(reviewId);
+//    }
+
+
 }

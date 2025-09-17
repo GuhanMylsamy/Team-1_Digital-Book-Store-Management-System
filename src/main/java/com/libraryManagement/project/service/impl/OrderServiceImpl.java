@@ -1,12 +1,12 @@
 package com.libraryManagement.project.service.impl;
 
 import com.libraryManagement.project.dto.requestDTO.BuyNowRequestDTO;
-import com.libraryManagement.project.dto.requestDTO.OrderItemRequestDTO;
 import com.libraryManagement.project.dto.requestDTO.OrderRequestDTO;
 import com.libraryManagement.project.dto.responseDTO.OrderItemResponseDTO;
 import com.libraryManagement.project.dto.responseDTO.OrderResponseDTO;
 import com.libraryManagement.project.entity.*;
-import com.libraryManagement.project.exception.ResourceNotFound;
+import com.libraryManagement.project.enums.OrderStatus;
+import com.libraryManagement.project.exception.ResourceNotFoundException;
 import com.libraryManagement.project.repository.*;
 import com.libraryManagement.project.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,42 +41,52 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponseDTO placeOrder(OrderRequestDTO orderRequestDTO){
+
+        //Fetch User, Cart, ShippingAddress Object from database using their IDs
+
         User user = userRepository.findById(orderRequestDTO.getUserId())
-                .orElseThrow(() -> new ResourceNotFound("User does not exist"));
+                .orElseThrow(() -> new ResourceNotFoundException("User does not exist"));
 
         Cart cart = cartRepository.findById(orderRequestDTO.getCartId())
-                .orElseThrow(() -> new ResourceNotFound("Cart does not exist"));
+                .orElseThrow(() -> new ResourceNotFoundException("Cart does not exist"));
 
 
         ShippingAddress address = shippingAddressRepository.findById(orderRequestDTO.getAddressId())
-                .orElseThrow(() -> new ResourceNotFound("Address does not exist"));
+                .orElseThrow(() -> new ResourceNotFoundException("Address does not exist"));
 
-        //TODO: Exception handling
         List<CartItems> cartItems = cartItemsRepository.findCartItemsByCartId(cart.getCartId());
 
+        if(cartItems.isEmpty()){
+            throw new ResourceNotFoundException("Cart is empty");
+        }
+
+        //Creating Order object
         Order order = new Order();
         order.setUser(user);
-        order.setStatus("PLACED");
+        order.setStatus(OrderStatus.PLACED);
         order.setPaymentId("1");
         order.setAddress(address);
 
 
         double totalAmount = 0.0;
         List<OrderItems> orderItems = new ArrayList<>();
-        //TODO: use streamapi
-        for(CartItems cartItem : cartItems){
-            Book book = cartItem.getBook();
-            int quantity = cartItem.getQuantity();
-            double price = book.getPrice();
-            totalAmount += price * quantity;
 
-            OrderItems orderItem = new OrderItems();
-            orderItem.setBook(book);
-            orderItem.setQuantity(quantity);
-            orderItem.setUnitPrice(price);
-            orderItem.setOrder(order);
-            orderItems.add(orderItem);
-        }
+        //Calculating total cost for all items
+        totalAmount = cartItems.stream()
+                .mapToDouble(cartItem -> cartItem.getBook().getPrice() * cartItem.getQuantity())
+                .sum();
+
+        //Mapping cartItems to orderItems
+        orderItems = cartItems.stream()
+                .map(cartItem -> {
+                    OrderItems orderItem = new OrderItems();
+                    orderItem.setBook(cartItem.getBook());
+                    orderItem.setQuantity(cartItem.getQuantity());
+                    orderItem.setUnitPrice(cartItem.getBook().getPrice());
+                    orderItem.setOrder(order);
+                    return orderItem;
+                })
+                .collect(Collectors.toList());
 
         order.setTotalAmount(totalAmount);
         order.setOrderItems(orderItems);
@@ -92,26 +102,31 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponseDTO buyNow(BuyNowRequestDTO buyNowRequestDTO){
+
+        //Fetch User, Cart, ShippingAddress Object from database using their IDs
+
         User user = userRepository.findById(buyNowRequestDTO.getUserId())
-                .orElseThrow(() -> new ResourceNotFound("User does not exist"));
+                .orElseThrow(() -> new ResourceNotFoundException("User does not exist"));
 
         ShippingAddress address = shippingAddressRepository.findById(buyNowRequestDTO.getAddressId())
-                .orElseThrow(() -> new ResourceNotFound("Address does not exist"));
+                .orElseThrow(() -> new ResourceNotFoundException("Address does not exist"));
 
         Book book = bookRepository.findById(buyNowRequestDTO.getAddressId())
-                .orElseThrow(() -> new ResourceNotFound("Book does not exist"));
+                .orElseThrow(() -> new ResourceNotFoundException("Book does not exist"));
 
         int quantity = buyNowRequestDTO.getQuantity();
         double price = book.getPrice();
 
+        //Creating orderItem object
         OrderItems orderItem = new OrderItems();
         orderItem.setBook(book);
         orderItem.setQuantity(quantity);
         orderItem.setUnitPrice(price);
 
+        //Creating Order Object
         Order order = new Order();
         order.setUser(user);
-        order.setStatus("PLACED");
+        order.setStatus(OrderStatus.PLACED);
         order.setPaymentId("1");
         order.setAddress(address);
         order.setTotalAmount(price);
@@ -134,6 +149,7 @@ public class OrderServiceImpl implements OrderService {
 
     private OrderResponseDTO mapToOrderResponseDTO(Order order, List<OrderItems> orderItems) {
 
+        //Mapping orderItems to OrderItemResponseDTO
         List<OrderItemResponseDTO> itemDTOs = orderItems.stream().map(item -> {
             OrderItemResponseDTO dto = new OrderItemResponseDTO();
             dto.setOrderItemId(item.getItemId());
@@ -144,6 +160,7 @@ public class OrderServiceImpl implements OrderService {
             return dto;
         }).collect(Collectors.toList());
 
+        //Mapping Order to OrderResponseDTO
         OrderResponseDTO response = new OrderResponseDTO();
         response.setOrderId(order.getOrderId());
         response.setUserId(order.getUser().getUserId());

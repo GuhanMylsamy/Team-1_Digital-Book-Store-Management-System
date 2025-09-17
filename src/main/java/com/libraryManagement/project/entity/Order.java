@@ -1,5 +1,6 @@
 package com.libraryManagement.project.entity;
 
+import com.libraryManagement.project.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,8 +19,9 @@ public class Order {
     @Column(name = "total_amount", nullable = false)
     private double totalAmount;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status",nullable = false)
-    private String status;
+    private OrderStatus status;
 
     @Column(name = "payment_id", nullable = false)
     private String paymentId;
