@@ -30,7 +30,7 @@ public class ReviewServiceImpl implements ReviewService {
     public List<ReviewResponseDTO> getAllReviews(Long bookId) {
         List<Review> reviews = reviewRepository.findByBookId(bookId);
         return reviews.stream()
-                .map(review -> new ReviewResponseDTO().reviewResponseDTOMapper(review))
+                .map(ReviewResponseDTO::reviewResponseDTOMapper)
                 .collect(Collectors.toList());
     }
 

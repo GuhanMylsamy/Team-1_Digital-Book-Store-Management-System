@@ -96,7 +96,7 @@ public class OrderServiceImpl implements OrderService {
             int orderQuantity = orderItem.getQuantity();
 
             Inventory inventory = inventoryRepository.findByBook(book)
-                    .orElseThrow(() -> new ResourceNotFound("No inventory present"));
+                    .orElseThrow(() -> new ResourceNotFoundException("No inventory present"));
 
             int stockQuantity = inventory.getStockQuantity();
             int updatedQuantity = stockQuantity - orderQuantity;
@@ -143,7 +143,7 @@ public class OrderServiceImpl implements OrderService {
 
         //updating inventory
         Inventory inventory = inventoryRepository.findByBook(book)
-                .orElseThrow(() -> new ResourceNotFound("No inventory present"));
+                .orElseThrow(() -> new ResourceNotFoundException("No inventory present"));
 
         int stockQuantity = inventory.getStockQuantity();
         int updatedQuantity = stockQuantity - quantity;
