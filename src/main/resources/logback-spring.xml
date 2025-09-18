@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <property name="LOG_PATH" value="logs" />
+    <property name="FILE_LOG_PATTERN"
+              value="%d{HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n" />
+
+    <appender name="CONSOLE_APPENDER" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>${FILE_LOG_PATTERN}</Pattern>
+        </layout>
+    </appender>
+
+    <appender name="SIFTING_APPENDER" class="ch.qos.logback.classic.sift.SiftingAppender">
+        <discriminator class="com.libraryManagement.project.util.RequestLogDiscriminator" />
+        <sift>
+            <appender name="FILE_APPENDER" class="ch.qos.logback.core.FileAppender">
+                <file>${LOG_PATH}/${requestLogFile}.log</file>
+                <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                    <Pattern>${FILE_LOG_PATTERN}</Pattern>
+                </encoder>
+            </appender>
+        </sift>
+    </appender>
+
+    <logger name="com.libraryManagement.project" level="DEBUG" additivity="false">
+        <appender-ref ref="SIFTING_APPENDER" />
+        <appender-ref ref="CONSOLE_APPENDER" />
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE_APPENDER" />
+    </root>
+
+</configuration>
