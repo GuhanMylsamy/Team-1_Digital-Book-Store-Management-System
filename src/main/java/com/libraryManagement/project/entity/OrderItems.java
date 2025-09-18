@@ -1,5 +1,6 @@
 package com.libraryManagement.project.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -19,12 +20,10 @@ public class OrderItems {
     @Column(name = "unit_price",nullable = false)
     private double unitPrice;
 
-    //TODO: orderId Relation ManyToOne
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name="order_id")
     private Order order;
 
-    //TODO: bookId Relation ManyToOne
     @ManyToOne
     @JoinColumn(name = "book_id")
     private Book book;
