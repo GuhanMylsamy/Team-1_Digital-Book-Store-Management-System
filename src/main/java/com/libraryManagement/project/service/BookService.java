@@ -33,5 +33,12 @@ public interface BookService {
     @Transactional
     void deleteBook(Long id);
 
+    default Book convertToEntity(BookRequestDTO bookRequestDTO) {
+        return new Book(bookRequestDTO.getTitle(), null, null, bookRequestDTO.getPrice(),bookRequestDTO.getStockQuantity(),bookRequestDTO.getImageUrl());
+    }
+
+    default BookResponseDTO convertToResponseDTO(Book book) {
+        return new BookResponseDTO(book.getBookId(), book.getTitle(), book.getAuthor().getName(), book.getCategory().getName(), book.getPrice(), book.getStockQuantity(),book.getImageUrl());
+    }
 }
 

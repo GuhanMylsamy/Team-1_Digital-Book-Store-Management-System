@@ -7,7 +7,6 @@ import com.libraryManagement.project.exception.BookNotFoundException;
 import com.libraryManagement.project.repository.*;
 import com.libraryManagement.project.service.BookService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,42 +25,40 @@ public class BookServiceImpl  implements BookService {
     private final OrderItemsRepository orderItemsRepository;
     private final CartRepository cartRepository;
 
-    private ModelMapper modelMapper;
-
     @Override
     public List<BookResponseDTO> getAllBooks() {
-        return bookRepository.findAll().stream().filter(book -> book.getActive() == null || book.getActive()).map(book -> modelMapper.map(book, BookResponseDTO.class)).collect(Collectors.toList());
+        return bookRepository.findAll().stream().filter(book -> book.getActive() == null || book.getActive()).map(this::convertToResponseDTO).collect(Collectors.toList());
     }
 
     @Override
     public BookResponseDTO getBookById(Long id){
         Book book = bookRepository.findById(id).orElseThrow(()-> new BookNotFoundException("not found"));
-        return modelMapper.map(book, BookResponseDTO.class);
+        return convertToResponseDTO(book);
     }
 
     @Override
-    public List<BookResponseDTO> getBooksByAuthor(Long authorId) {
-        return bookRepository.findByAuthorAuthorId(authorId).stream().map(book -> modelMapper.map(book,BookResponseDTO.class)).collect(Collectors.toList());
+    public List getBooksByAuthor(Long authorId) {
+        return bookRepository.findByAuthorAuthorId(authorId).stream().map(this::convertToResponseDTO).collect(Collectors.toList());
     }
 
     @Override
-    public List<BookResponseDTO> getBooksByCategory(Long categoryId) {
-        return bookRepository.findByCategoryCategoryId(categoryId).stream().map(book -> modelMapper.map(book, BookResponseDTO.class)).collect(Collectors.toList());
+    public List getBooksByCategory(Long categoryId) {
+        return bookRepository.findByCategoryCategoryId(categoryId).stream().map(this::convertToResponseDTO).collect(Collectors.toList());
     }
 
     @Override
-    public List<BookResponseDTO> findBooksByTitle(String title) {
-        return bookRepository.findByTitleContainingIgnoreCase(title).stream().map(book -> modelMapper.map(book, BookResponseDTO.class)).collect(Collectors.toList());
+    public List findBooksByTitle(String title) {
+        return bookRepository.findByTitleContainingIgnoreCase(title).stream().map(this::convertToResponseDTO).collect(Collectors.toList());
     }
 
     @Override
-    public List<BookResponseDTO> findBooksByAuthor(String authorName) {
-        return bookRepository.findByAuthorNameContainingIgnoreCase(authorName).stream().map(book -> modelMapper.map(book, BookResponseDTO.class)).collect(Collectors.toList());
+    public List findBooksByAuthor(String authorName) {
+        return bookRepository.findByAuthorNameContainingIgnoreCase(authorName).stream().map(this::convertToResponseDTO).collect(Collectors.toList());
     }
 
     @Override
-    public List<BookResponseDTO> findBooksByCategory(String categoryName) {
-        return bookRepository.findByCategoryNameContainingIgnoreCase(categoryName).stream().map(book -> modelMapper.map(book, BookResponseDTO.class)).collect(Collectors.toList());
+    public List findBooksByCategory(String categoryName) {
+        return bookRepository.findByCategoryNameContainingIgnoreCase(categoryName).stream().map(this::convertToResponseDTO).collect(Collectors.toList());
     }
 
     //TO-DO we can use model mapper in this
@@ -93,7 +90,7 @@ public class BookServiceImpl  implements BookService {
         }
 
         // Convert DTO to Book entity and set its author and category
-        Book book = modelMapper.map(bookRequestDTO, Book.class);
+        Book book = convertToEntity(bookRequestDTO);
         book.setAuthor(author);
         book.setCategory(category);
 
@@ -108,7 +105,7 @@ public class BookServiceImpl  implements BookService {
         inventoryRepository.save(inventory);
 
         // Convert the saved book entity to a response DTO and return it
-        return modelMapper.map(savedBook, BookResponseDTO.class);
+        return convertToResponseDTO(savedBook);
     }
 
     @Transactional
@@ -156,7 +153,7 @@ public class BookServiceImpl  implements BookService {
         });
 
         // Convert the updated book entity to a response DTO and return it
-        return modelMapper.map(updatedBook, BookResponseDTO.class);
+        return convertToResponseDTO(updatedBook);
     }
 
     @Transactional

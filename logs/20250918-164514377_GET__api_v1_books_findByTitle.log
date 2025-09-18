@@ -1,0 +1,1 @@
+16:45:14.376 INFO  [http-nio-8080-exec-4] c.l.project.aspect.LoggingAspect -   -> Exiting: com.libraryManagement.project.controller.BookController.findBooksByTitle() with result: <200 OK OK,[BookResponseDTO(bookId=2, title=Effective Java, authorName=Joshua Bloch, categoryName=Programming, price=599.0, stockQuantity=15, imageUrl=effectivejava.jpg)],[]> | Time: 44ms
