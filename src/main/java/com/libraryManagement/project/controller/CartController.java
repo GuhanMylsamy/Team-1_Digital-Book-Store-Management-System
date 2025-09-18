@@ -1,6 +1,7 @@
 package com.libraryManagement.project.controller;
 
 import com.libraryManagement.project.service.CartService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,8 +11,10 @@ import java.util.Map;
 @RequestMapping("/cart")
 public class CartController {
 
+
     private final CartService cartService;
 
+    @Autowired
     public CartController(CartService cartService) {
         this.cartService = cartService;
     }
