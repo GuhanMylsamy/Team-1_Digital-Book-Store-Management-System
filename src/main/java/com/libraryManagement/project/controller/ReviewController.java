@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/v1")
+@RequestMapping("api/v1/reviews")
 public class ReviewController {
 
     private final ReviewServiceImpl reviewService;

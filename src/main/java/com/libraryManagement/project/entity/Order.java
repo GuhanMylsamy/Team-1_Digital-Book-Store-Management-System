@@ -44,7 +44,7 @@ public class Order {
     @JsonBackReference
     private List<Payments> payments;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="shipping_address")
     private ShippingAddress address;
 }

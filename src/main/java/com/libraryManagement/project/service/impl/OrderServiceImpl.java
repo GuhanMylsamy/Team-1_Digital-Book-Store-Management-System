@@ -90,8 +90,6 @@ public class OrderServiceImpl implements OrderService {
                 })
                 .collect(Collectors.toList());
 
-        //remove all the cart items
-        cartItemsRepository.deleteAll(cartItems);
 
         //Updating inventory
         orderItems.forEach(orderItem -> {
@@ -111,11 +109,16 @@ public class OrderServiceImpl implements OrderService {
 
         order.setTotalAmount(totalAmount);
         order.setOrderItems(orderItems);
-        cartRepository.delete(cart);
+
+
+        //save order and order items
         ordersRepository.save(order);
         orderItemsRepository.saveAll(orderItems);
 
-        
+        //remove all the cart items
+        cartItemsRepository.deleteAll(cartItems);
+        cartRepository.delete(cart);
+
         return mapToOrderResponseDTO(order,orderItems);
 
         
