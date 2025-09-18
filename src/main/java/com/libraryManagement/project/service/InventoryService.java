@@ -18,11 +18,4 @@ public interface InventoryService {
 
     List<Map<String, Object>> checkLowStock();
 
-    default InventoryResponseDTO convertToResponseDTO(Inventory inventory) {
-        return new InventoryResponseDTO(
-                inventory.getId(),
-                inventory.getBook(),
-                inventory.getStockQuantity()
-        );
-    }
 }
