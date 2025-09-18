@@ -8,11 +8,7 @@ import com.libraryManagement.project.exception.BookNotFoundException;
 import com.libraryManagement.project.repository.BookRepository;
 import com.libraryManagement.project.repository.InventoryRepository;
 import com.libraryManagement.project.service.InventoryService;
-<<<<<<< HEAD
-import org.modelmapper.ModelMapper;
-=======
 import org.springframework.beans.factory.annotation.Autowired;
->>>>>>> 4512b4bf8a089b6e83464546bc76b00b7e7b9c0d
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,12 +22,7 @@ public class InventoryServiceImpl implements InventoryService {
     private final InventoryRepository inventoryRepository;
     private final BookRepository bookRepository;
 
-<<<<<<< HEAD
-    private ModelMapper modelMapper;
-
-=======
     @Autowired
->>>>>>> 4512b4bf8a089b6e83464546bc76b00b7e7b9c0d
     public InventoryServiceImpl(InventoryRepository inventoryRepository, BookRepository bookRepository) {
         this.inventoryRepository = inventoryRepository;
         this.bookRepository = bookRepository;
@@ -40,7 +31,7 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     public List<InventoryResponseDTO> getAllInventory() {
         return inventoryRepository.findAll().stream()
-                .map(inventory -> modelMapper.map(inventory, InventoryResponseDTO.class))
+                .map(this::convertToResponseDTO)
                 .collect(Collectors.toList());
     }
 
@@ -48,7 +39,7 @@ public class InventoryServiceImpl implements InventoryService {
     public InventoryResponseDTO getInventoryById(Long id) {
         Inventory inventory = inventoryRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException("Book inventory for requested id is not available."));
-        return modelMapper.map(inventory, InventoryResponseDTO.class);
+        return convertToResponseDTO(inventory);
     }
 
     @Transactional
