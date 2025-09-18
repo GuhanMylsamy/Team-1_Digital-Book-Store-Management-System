@@ -8,7 +8,11 @@ import com.libraryManagement.project.exception.BookNotFoundException;
 import com.libraryManagement.project.repository.BookRepository;
 import com.libraryManagement.project.repository.InventoryRepository;
 import com.libraryManagement.project.service.InventoryService;
+<<<<<<< HEAD
 import org.modelmapper.ModelMapper;
+=======
+import org.springframework.beans.factory.annotation.Autowired;
+>>>>>>> 4512b4bf8a089b6e83464546bc76b00b7e7b9c0d
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,8 +26,12 @@ public class InventoryServiceImpl implements InventoryService {
     private final InventoryRepository inventoryRepository;
     private final BookRepository bookRepository;
 
+<<<<<<< HEAD
     private ModelMapper modelMapper;
 
+=======
+    @Autowired
+>>>>>>> 4512b4bf8a089b6e83464546bc76b00b7e7b9c0d
     public InventoryServiceImpl(InventoryRepository inventoryRepository, BookRepository bookRepository) {
         this.inventoryRepository = inventoryRepository;
         this.bookRepository = bookRepository;
