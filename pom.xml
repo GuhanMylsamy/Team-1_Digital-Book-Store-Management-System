@@ -78,6 +78,7 @@
 			<version>2.2.0</version>
 		</dependency>
 
+<<<<<<< HEAD
 <!--		model mapper-->
 		<dependency>
 			<groupId>org.modelmapper</groupId>
@@ -89,6 +90,13 @@
 			<artifactId>modelmapper-spring</artifactId>
 			<version>3.0.0</version>
 		</dependency>
+=======
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+
+>>>>>>> 4512b4bf8a089b6e83464546bc76b00b7e7b9c0d
 
 	</dependencies>
 

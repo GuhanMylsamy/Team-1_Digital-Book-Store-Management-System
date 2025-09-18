@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.libraryManagement.project.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.List;
 
 @Entity
 @Data
 @Table(name = "orders")
+@ToString(exclude = {"orderItems","payments"})
 public class Order {
 
     @Id

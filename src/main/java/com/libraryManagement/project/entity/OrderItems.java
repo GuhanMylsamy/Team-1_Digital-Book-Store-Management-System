@@ -3,10 +3,12 @@ package com.libraryManagement.project.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Data
 @Table(name = "order_items")
+@ToString
 public class OrderItems {
 
     @Id

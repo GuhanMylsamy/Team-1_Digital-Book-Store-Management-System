@@ -2,12 +2,14 @@ package com.libraryManagement.project.entity;
 import com.libraryManagement.project.enums.Role;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.List;
 
 @Entity
 @Table(name = "users")
 @Data
+@ToString(exclude = {"orders","addresses"})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
