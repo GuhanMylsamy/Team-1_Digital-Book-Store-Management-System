@@ -10,7 +10,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/authors")
+@RequestMapping("/api/v1/authors")
 public class AuthorController {
 
     private final AuthorServiceImpl authorService;
@@ -30,8 +30,8 @@ public class AuthorController {
         return ResponseEntity.ok(author);
     }
 
-    @GetMapping("/name/{name}")
-    public ResponseEntity<Author> getAuthorByName(@PathVariable String name){
+    @GetMapping("/getAuthor")
+    public ResponseEntity<Author> getAuthorByName(@RequestParam("name") String name){
         return ResponseEntity.ok(authorService.getAuthorByName(name));
 
     }

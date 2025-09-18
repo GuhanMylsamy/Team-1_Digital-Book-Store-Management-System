@@ -1,3 +1,5 @@
+-- This script seeds the database with initial data for the Digital Book Store.
+
 -- 👤 USERS
 INSERT INTO users (user_id, email, full_name, new_password, old_password, password, role)
 VALUES (1, 'alice@example.com', 'Alice Sharma', 'newpass123', 'oldpass123', 'pass123', 'USER');
@@ -9,42 +11,30 @@ INSERT INTO users (user_id, email, full_name, new_password, old_password, passwo
 VALUES (3, 'admin@example.com', 'Admin User', 'newadminpass', 'oldadminpass', 'adminpass', 'ADMIN');
 
 -- 🏠 SHIPPING ADDRESSES
-INSERT INTO shipping_address (
-  shipping_id, address_line1, address_line2, city, country,
-  full_name, phone, postal_code, state, shipping_address
-)
-VALUES (
-  1, '123 MG Road', 'Near Town Hall', 'Coimbatore', 'India',
-  'Alice Sharma', '9876543210', '641001', 'TN', 1
-);
+INSERT INTO shipping_address (shipping_id, address_line1, address_line2, city, country, full_name, phone, postal_code, state, user_id)
+VALUES (1, '123 MG Road', 'Near Town Hall', 'Coimbatore', 'India', 'Alice Sharma', '9876543210', '641001', 'TN', 1);
 
-INSERT INTO shipping_address (
-  shipping_id, address_line1, address_line2, city, country,
-  full_name, phone, postal_code, state, shipping_address
-)
-VALUES (
-  2, '456 Anna Nagar', 'Opposite Park', 'Chennai', 'India',
-  'Rahul Verma', '9123456780', '600040', 'TN', 2
-);
+INSERT INTO shipping_address (shipping_id, address_line1, address_line2, city, country, full_name, phone, postal_code, state, user_id)
+VALUES (2, '456 Anna Nagar', 'Opposite Park', 'Chennai', 'India', 'Rahul Verma', '9123456780', '600040', 'TN', 2);
 
 -- 🖋️ AUTHORS
-INSERT INTO authors (AuthorID, Name)
+INSERT INTO authors (authorid, name)
 VALUES (1, 'Craig Walls');
 
-INSERT INTO authors (AuthorID, Name)
+INSERT INTO authors (authorid, name)
 VALUES (2, 'Joshua Bloch');
 
-INSERT INTO authors (AuthorID, Name)
+INSERT INTO authors (authorid, name)
 VALUES (3, 'Robert Martin');
 
 -- 🗂️ CATEGORIES
-INSERT INTO categories (CategoryID, Name)
+INSERT INTO categories (categoryid, name)
 VALUES (1, 'Programming');
 
-INSERT INTO categories (CategoryID, Name)
+INSERT INTO categories (categoryid, name)
 VALUES (2, 'Design');
 
-INSERT INTO categories (CategoryID, Name)
+INSERT INTO categories (categoryid, name)
 VALUES (3, 'Databases');
 
 -- 📚 BOOKS
@@ -92,10 +82,10 @@ VALUES (3, 1, 2, 2);
 
 -- 📦 ORDERS
 INSERT INTO orders (order_id, total_amount, status, payment_id, user_id,  shipping_address)
-VALUES (1, 1449.48, 'PLACED', 'PAY123', 1,1);
+VALUES (1, 1449.48, 'PLACED', 'PAY123', 1, 1);
 
 INSERT INTO orders (order_id, total_amount, status, payment_id, user_id, shipping_address)
-VALUES (2, 599.00, 'PLACED', 'PAY456', 2,2);
+VALUES (2, 599.00, 'PLACED', 'PAY456', 2, 2);
 
 -- 📦 ORDER ITEMS
 INSERT INTO order_items (item_id, quantity, unit_price, order_id, book_id)
@@ -113,8 +103,6 @@ VALUES (1, 'Razorpay', 'RP123', 1449.48, 'PAID', 1);
 
 INSERT INTO payments (payment_id, provider, provider_ref, amount, status, order_order_id)
 VALUES (2, 'Paytm', 'PT456', 599.00, 'PAID', 2);
-
-
 
 -- 📝 REVIEWS
 INSERT INTO reviews (review_id, user_id, book_id, rating, content)
