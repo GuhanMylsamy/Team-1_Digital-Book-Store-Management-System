@@ -1,5 +1,6 @@
 package com.libraryManagement.project.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.mapping.Join;
@@ -40,6 +41,8 @@ public class ShippingAddress {
 
     // Relationships
     @ManyToOne
-    @JoinColumn(name = "address")
+    @JoinColumn(name = "shipping_address",nullable = false)
+    @JsonBackReference
     private User user;
+
 }

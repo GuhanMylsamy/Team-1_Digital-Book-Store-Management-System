@@ -1,5 +1,6 @@
 package com.libraryManagement.project.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.libraryManagement.project.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -29,15 +30,19 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "user_id",nullable = false)
+    @JsonBackReference
     private User user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL,orphanRemoval = true)
+    @JsonBackReference
     private List<OrderItems> orderItems;
 
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
     private List<Payments> payments;
 
     @OneToOne
+    @JoinColumn(name="shipping_address")
     private ShippingAddress address;
 }
