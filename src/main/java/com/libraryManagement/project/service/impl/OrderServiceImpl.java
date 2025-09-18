@@ -70,8 +70,8 @@ public class OrderServiceImpl implements OrderService {
         order.setAddress(address);
 
 
-        double totalAmount = 0.0;
-        List<OrderItems> orderItems = new ArrayList<>();
+        double totalAmount;
+        List<OrderItems> orderItems;
 
         //Calculating total cost for all items
         totalAmount = cartItems.stream()
@@ -89,6 +89,9 @@ public class OrderServiceImpl implements OrderService {
                     return orderItem;
                 })
                 .collect(Collectors.toList());
+
+        //remove all the cart items
+        cartItemsRepository.deleteAll(cartItems);
 
         //Updating inventory
         orderItems.forEach(orderItem -> {
@@ -108,6 +111,7 @@ public class OrderServiceImpl implements OrderService {
 
         order.setTotalAmount(totalAmount);
         order.setOrderItems(orderItems);
+        cartRepository.delete(cart);
         ordersRepository.save(order);
         orderItemsRepository.saveAll(orderItems);
 
@@ -148,6 +152,8 @@ public class OrderServiceImpl implements OrderService {
         int stockQuantity = inventory.getStockQuantity();
         int updatedQuantity = stockQuantity - quantity;
 
+        inventory.setStockQuantity(updatedQuantity);
+
         inventoryRepository.save(inventory);
 
         //Creating Order Object
@@ -164,6 +170,7 @@ public class OrderServiceImpl implements OrderService {
         orderItems.add(orderItem);
 
         order.setOrderItems(orderItems);
+
 
         ordersRepository.save(order);
         orderItemsRepository.saveAll(orderItems);
