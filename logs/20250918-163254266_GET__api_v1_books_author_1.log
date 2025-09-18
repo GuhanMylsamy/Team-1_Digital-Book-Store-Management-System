@@ -1,1 +1,0 @@
-16:32:54.266 INFO  [http-nio-8080-exec-1] c.l.project.aspect.LoggingAspect -   -> Exiting: com.libraryManagement.project.controller.BookController.getBooksByAuthor() with result: <200 OK OK,[BookResponseDTO(bookId=1, title=Spring Boot in Action, authorName=Craig Walls, categoryName=Programming, price=499.99, stockQuantity=20, imageUrl=springboot.jpg)],[]> | Time: 21ms

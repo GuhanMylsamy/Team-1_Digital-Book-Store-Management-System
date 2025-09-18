@@ -1,1 +1,0 @@
-16:29:21.573 INFO  [http-nio-8080-exec-5] c.l.project.aspect.LoggingAspect - ▶️ API Request: Method=GET Path=/api/v1/books/1 IP=0:0:0:0:0:0:0:1
