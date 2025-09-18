@@ -41,7 +41,7 @@ public class ShippingAddress {
 
     // Relationships
     @ManyToOne
-    @JoinColumn(name = "shipping_address",nullable = false)
+    @JoinColumn(name = "user_id",nullable = false)
     @JsonBackReference
     private User user;
 
