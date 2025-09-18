@@ -27,9 +27,10 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemsRepository orderItemsRepository;
     private final ShippingAddressRepository shippingAddressRepository;
     private final BookRepository bookRepository;
+    private final InventoryRepository inventoryRepository;
 
     @Autowired
-    public OrderServiceImpl(UserRepository userRepository, CartRepository cartRepository, CartItemsRepository cartItemsRepository, OrdersRepository ordersRepository, OrderItemsRepository orderItemsRepository, ShippingAddressRepository shippingAddressRepository, BookRepository bookRepository) {
+    public OrderServiceImpl(UserRepository userRepository, CartRepository cartRepository, CartItemsRepository cartItemsRepository, OrdersRepository ordersRepository, OrderItemsRepository orderItemsRepository, ShippingAddressRepository shippingAddressRepository, BookRepository bookRepository, InventoryRepository inventoryRepository) {
         this.userRepository = userRepository;
         this.cartRepository = cartRepository;
         this.cartItemsRepository = cartItemsRepository;
@@ -37,6 +38,7 @@ public class OrderServiceImpl implements OrderService {
         this.orderItemsRepository = orderItemsRepository;
         this.shippingAddressRepository = shippingAddressRepository;
         this.bookRepository = bookRepository;
+        this.inventoryRepository = inventoryRepository;
     }
 
     @Override
@@ -88,6 +90,22 @@ public class OrderServiceImpl implements OrderService {
                 })
                 .collect(Collectors.toList());
 
+        //Updating inventory
+        orderItems.forEach(orderItem -> {
+            Book book = orderItem.getBook();
+            int orderQuantity = orderItem.getQuantity();
+
+            Inventory inventory = inventoryRepository.findByBook(book)
+                    .orElseThrow(() -> new ResourceNotFoundException("No inventory present"));
+
+            int stockQuantity = inventory.getStockQuantity();
+            int updatedQuantity = stockQuantity - orderQuantity;
+
+            inventory.setStockQuantity(updatedQuantity);
+
+            inventoryRepository.save(inventory);
+        });
+
         order.setTotalAmount(totalAmount);
         order.setOrderItems(orderItems);
         ordersRepository.save(order);
@@ -122,6 +140,15 @@ public class OrderServiceImpl implements OrderService {
         orderItem.setBook(book);
         orderItem.setQuantity(quantity);
         orderItem.setUnitPrice(price);
+
+        //updating inventory
+        Inventory inventory = inventoryRepository.findByBook(book)
+                .orElseThrow(() -> new ResourceNotFoundException("No inventory present"));
+
+        int stockQuantity = inventory.getStockQuantity();
+        int updatedQuantity = stockQuantity - quantity;
+
+        inventoryRepository.save(inventory);
 
         //Creating Order Object
         Order order = new Order();
@@ -172,5 +199,14 @@ public class OrderServiceImpl implements OrderService {
         return response;
 
 
+    }
+
+    @Override
+    public List<Order> getAllOrders() {
+        return ordersRepository.findAll();
+    }
+
+    public List<OrderItems> getOrdersByUserId(Long userId) {
+        return orderItemsRepository.findAllByUserId(userId);
     }
 }
