@@ -7,7 +7,6 @@ import com.libraryManagement.project.exception.BookNotFoundException;
 import com.libraryManagement.project.repository.*;
 import com.libraryManagement.project.service.BookService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
