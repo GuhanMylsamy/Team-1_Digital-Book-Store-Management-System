@@ -27,9 +27,10 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemsRepository orderItemsRepository;
     private final ShippingAddressRepository shippingAddressRepository;
     private final BookRepository bookRepository;
+    private final InventoryRepository inventoryRepository;
 
     @Autowired
-    public OrderServiceImpl(UserRepository userRepository, CartRepository cartRepository, CartItemsRepository cartItemsRepository, OrdersRepository ordersRepository, OrderItemsRepository orderItemsRepository, ShippingAddressRepository shippingAddressRepository, BookRepository bookRepository) {
+    public OrderServiceImpl(UserRepository userRepository, CartRepository cartRepository, CartItemsRepository cartItemsRepository, OrdersRepository ordersRepository, OrderItemsRepository orderItemsRepository, ShippingAddressRepository shippingAddressRepository, BookRepository bookRepository, InventoryRepository inventoryRepository) {
         this.userRepository = userRepository;
         this.cartRepository = cartRepository;
         this.cartItemsRepository = cartItemsRepository;
@@ -37,6 +38,7 @@ public class OrderServiceImpl implements OrderService {
         this.orderItemsRepository = orderItemsRepository;
         this.shippingAddressRepository = shippingAddressRepository;
         this.bookRepository = bookRepository;
+        this.inventoryRepository = inventoryRepository;
     }
 
     @Override
@@ -68,8 +70,8 @@ public class OrderServiceImpl implements OrderService {
         order.setAddress(address);
 
 
-        double totalAmount = 0.0;
-        List<OrderItems> orderItems = new ArrayList<>();
+        double totalAmount;
+        List<OrderItems> orderItems;
 
         //Calculating total cost for all items
         totalAmount = cartItems.stream()
@@ -88,12 +90,35 @@ public class OrderServiceImpl implements OrderService {
                 })
                 .collect(Collectors.toList());
 
+
+        //Updating inventory
+        orderItems.forEach(orderItem -> {
+            Book book = orderItem.getBook();
+            int orderQuantity = orderItem.getQuantity();
+
+            Inventory inventory = inventoryRepository.findByBook(book)
+                    .orElseThrow(() -> new ResourceNotFoundException("No inventory present"));
+
+            int stockQuantity = inventory.getStockQuantity();
+            int updatedQuantity = stockQuantity - orderQuantity;
+
+            inventory.setStockQuantity(updatedQuantity);
+
+            inventoryRepository.save(inventory);
+        });
+
         order.setTotalAmount(totalAmount);
         order.setOrderItems(orderItems);
+
+
+        //save order and order items
         ordersRepository.save(order);
         orderItemsRepository.saveAll(orderItems);
 
-        
+        //remove all the cart items
+        cartItemsRepository.deleteAll(cartItems);
+        cartRepository.delete(cart);
+
         return mapToOrderResponseDTO(order,orderItems);
 
         
@@ -123,6 +148,17 @@ public class OrderServiceImpl implements OrderService {
         orderItem.setQuantity(quantity);
         orderItem.setUnitPrice(price);
 
+        //updating inventory
+        Inventory inventory = inventoryRepository.findByBook(book)
+                .orElseThrow(() -> new ResourceNotFoundException("No inventory present"));
+
+        int stockQuantity = inventory.getStockQuantity();
+        int updatedQuantity = stockQuantity - quantity;
+
+        inventory.setStockQuantity(updatedQuantity);
+
+        inventoryRepository.save(inventory);
+
         //Creating Order Object
         Order order = new Order();
         order.setUser(user);
@@ -137,6 +173,7 @@ public class OrderServiceImpl implements OrderService {
         orderItems.add(orderItem);
 
         order.setOrderItems(orderItems);
+
 
         ordersRepository.save(order);
         orderItemsRepository.saveAll(orderItems);
@@ -172,5 +209,14 @@ public class OrderServiceImpl implements OrderService {
         return response;
 
 
+    }
+
+    @Override
+    public List<Order> getAllOrders() {
+        return ordersRepository.findAll();
+    }
+
+    public List<OrderItems> getOrdersByUserId(Long userId) {
+        return orderItemsRepository.findAllByUserId(userId);
     }
 }
