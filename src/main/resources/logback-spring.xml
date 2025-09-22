@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <property name="LOG_PATH" value="logs" />
+    <property name="LOG_PATTERN" value="%d{HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n" />
+
+    <!-- Appender to log to the console -->
+    <appender name="CONSOLE_APPENDER" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>${LOG_PATTERN}</Pattern>
+        </encoder>
+    </appender>
+
+    <!-- Appender to log to a single, rolling file -->
+    <appender name="FILE_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/application.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>${LOG_PATTERN}</Pattern>
+        </encoder>
+
+        <!--
+          CORRECTED SECTION:
+          This policy handles both size and time-based rolling.
+          It will create a new log file when the current one reaches 10MB
+          or when the date changes.
+        -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- path to archived log files -->
+            <fileNamePattern>${LOG_PATH}/archived/application-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <!-- each file should be at most 10MB, keep 30 days of history, but max 500MB total-->
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>500MB</totalSizeCap>
+        </rollingPolicy>
+
+    </appender>
+
+    <!-- Configure logging for your application's package -->
+    <logger name="com.libraryManagement.project" level="DEBUG" additivity="false">
+        <appender-ref ref="FILE_APPENDER" />
+        <appender-ref ref="CONSOLE_APPENDER" />
+    </logger>
+
+    <!-- Root logger for all other logs (e.g., Spring Framework) -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE_APPENDER" />
+        <appender-ref ref="FILE_APPENDER" />
+    </root>
+
+</configuration>
+
