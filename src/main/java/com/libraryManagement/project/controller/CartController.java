@@ -3,6 +3,7 @@ package com.libraryManagement.project.controller;
 import com.libraryManagement.project.dto.requestDTO.CartItemRequestDTO;
 import com.libraryManagement.project.dto.responseDTO.CartResponseDTO;
 import com.libraryManagement.project.service.CartService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,8 +13,14 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/cart")
 public class CartController {
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> main
     private final CartService cartService;
 
+    @Autowired
     public CartController(CartService cartService) {
         this.cartService = cartService;
     }
