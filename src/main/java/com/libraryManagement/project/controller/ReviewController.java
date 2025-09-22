@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-@RestController
-@RequestMapping("api/v1")
+
+@RequestMapping("api/v1/review")
 public class ReviewController {
 
     private final ReviewServiceImpl reviewService;
@@ -43,7 +43,7 @@ public class ReviewController {
         return ResponseEntity.ok(reviews);
     }
 
-    @PostMapping("{bookId}/createReview")
+    @PostMapping("createReview/{bookId}")
     public ResponseEntity<ReviewResponseDTO> createReview(@PathVariable Long bookId , @RequestBody ReviewRequestDTO reviewRequestDTO) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new ResourceNotFoundException("Book not found") );

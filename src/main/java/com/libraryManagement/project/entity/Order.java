@@ -1,14 +1,17 @@
 package com.libraryManagement.project.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.libraryManagement.project.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.List;
 
 @Entity
 @Data
 @Table(name = "orders")
+@ToString(exclude = {"orderItems","payments"})
 public class Order {
 
     @Id
@@ -29,15 +32,19 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "user_id",nullable = false)
+    @JsonBackReference
     private User user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL,orphanRemoval = true)
+    @JsonBackReference
     private List<OrderItems> orderItems;
 
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
     private List<Payments> payments;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="shipping_address")
     private ShippingAddress address;
 }
