@@ -13,11 +13,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/cart")
 public class CartController {
-<<<<<<< HEAD
-=======
-
-
->>>>>>> main
     private final CartService cartService;
 
     @Autowired
