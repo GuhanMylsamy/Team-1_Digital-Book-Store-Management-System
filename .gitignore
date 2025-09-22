@@ -33,6 +33,8 @@ nbdist/
 # VS Code
 .vscode/
 
+logs/
+
 # Exceptions for source folders
 !**/src/main/**/target/
 !**/src/test/**/target/
