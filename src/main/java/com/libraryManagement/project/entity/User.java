@@ -1,4 +1,5 @@
 package com.libraryManagement.project.entity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.libraryManagement.project.enums.Role;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -37,9 +38,11 @@ public class User {
 
     // Relationships
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
     private List<Order> orders;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
     private List<ShippingAddress> addresses;
 
 
