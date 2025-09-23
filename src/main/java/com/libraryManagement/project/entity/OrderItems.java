@@ -24,9 +24,11 @@ public class OrderItems {
 
     @ManyToOne
     @JoinColumn(name="order_id")
+    @JsonBackReference
     private Order order;
 
     @ManyToOne
     @JoinColumn(name = "book_id")
+    @JsonBackReference
     private Book book;
 }

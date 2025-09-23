@@ -46,5 +46,6 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="shipping_address")
+    @JsonBackReference
     private ShippingAddress address;
 }
