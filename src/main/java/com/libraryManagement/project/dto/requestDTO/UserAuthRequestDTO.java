@@ -1,0 +1,14 @@
+package com.libraryManagement.project.dto.requestDTO;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserAuthRequestDTO {
+
+    private String email;
+    private String password;
+}
