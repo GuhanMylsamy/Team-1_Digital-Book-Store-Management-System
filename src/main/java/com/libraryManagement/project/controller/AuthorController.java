@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -36,18 +37,22 @@ public class AuthorController {
 
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<Author> addAuthor(@Valid @RequestBody Author author) {
         Author newAuthor = authorService.addAuthor(author);
         return new ResponseEntity<>(newAuthor, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/update/{id}")
     public ResponseEntity<Author> updateAuthor(@PathVariable Long id, @Valid @RequestBody Author authorDetails) {
         Author updatedAuthor = authorService.updateAuthor(id, authorDetails);
         return ResponseEntity.ok(updatedAuthor);
 
     }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteAuthor(@PathVariable Long id) {
         return authorService.deleteAuthor(id);
