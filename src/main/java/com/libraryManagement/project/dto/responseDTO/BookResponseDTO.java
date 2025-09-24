@@ -3,9 +3,13 @@ package com.libraryManagement.project.dto.responseDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class BookResponseDTO {
     private Long bookId;
     private String title;
@@ -15,16 +19,11 @@ public class BookResponseDTO {
     private int stockQuantity;
     private String imageUrl;
 
-    public BookResponseDTO(Long bookId, @NotBlank String title, @NotNull String authorName,
-                           @NotNull String categoryName, @NotNull @Positive Double price,
-                           int stockQuantity, String imageUrl) {
+    public BookResponseDTO(Long bookId, String title, String authorName, String categoryName) {
         this.bookId = bookId;
         this.title = title;
         this.authorName = authorName;
         this.categoryName = categoryName;
-        this.price = price;
-        this.stockQuantity = stockQuantity;
-        this.imageUrl = imageUrl;
     }
 
 }
