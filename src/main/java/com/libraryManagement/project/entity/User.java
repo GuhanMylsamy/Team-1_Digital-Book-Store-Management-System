@@ -49,8 +49,6 @@ public class User {
     @JsonManagedReference("user-addresses")
     private List<ShippingAddress> addresses;
 
-    // In User.java
-
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(STR."ROLE_\{this.role.name()}"));
     }
