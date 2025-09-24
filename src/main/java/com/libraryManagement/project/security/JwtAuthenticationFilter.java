@@ -37,7 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             Role role = jwtUtil.extractRole(token);
             Long userId = jwtUtil.extractUserId(token);
 
-            // Using "ROLE_" prefix is a standard Spring Security convention.
+
             var authorities = List.of(new SimpleGrantedAuthority(role.name()));
 
             // This custom principal will be available throughout the application for authenticated users.
