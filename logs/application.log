@@ -8942,3 +8942,51 @@ This generated password is for development use only. Your security configuration
 10:16:35.363 INFO  [main] o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
 10:16:35.367 INFO  [main] o.s.t.w.s.TestDispatcherServlet - Completed initialization in 4 ms
 10:16:35.420 INFO  [main] c.l.p.controller.OrderControllerTest - Started OrderControllerTest in 3.782 seconds (process running for 5.074)
+10:22:40.143 INFO  [background-preinit] o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+10:22:40.173 INFO  [main] c.l.p.controller.OrderControllerTest - Starting OrderControllerTest using Java 21 with PID 4892 (started by 2440540 in C:\2440540\JFS Training Project\Library-Management)
+10:22:40.174 DEBUG [main] c.l.p.controller.OrderControllerTest - Running with Spring Boot v3.3.1, Spring v6.1.10
+10:22:40.174 INFO  [main] c.l.p.controller.OrderControllerTest - No active profile set, falling back to 1 default profile: "default"
+10:22:42.962 WARN  [main] o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: e6e2d9be-11bf-44b6-8f61-cca71007da55
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+10:22:42.996 INFO  [main] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+10:22:43.230 DEBUG [main] c.l.p.s.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+10:22:43.240 INFO  [main] o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+10:22:43.241 INFO  [main] o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+10:22:43.242 INFO  [main] o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+10:22:43.287 INFO  [main] c.l.p.controller.OrderControllerTest - Started OrderControllerTest in 3.59 seconds (process running for 4.853)
+10:23:12.906 INFO  [background-preinit] o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+10:23:12.945 INFO  [main] c.l.p.controller.CartControllerTest - Starting CartControllerTest using Java 21 with PID 26412 (started by 2440540 in C:\2440540\JFS Training Project\Library-Management)
+10:23:12.945 DEBUG [main] c.l.p.controller.CartControllerTest - Running with Spring Boot v3.3.1, Spring v6.1.10
+10:23:12.946 INFO  [main] c.l.p.controller.CartControllerTest - No active profile set, falling back to 1 default profile: "default"
+10:23:15.638 WARN  [main] o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 039a6a45-f188-42bd-a132-925f7adf959d
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+10:23:15.672 INFO  [main] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+10:23:15.947 DEBUG [main] c.l.p.s.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+10:23:15.960 INFO  [main] o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+10:23:15.961 INFO  [main] o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+10:23:15.964 INFO  [main] o.s.t.w.s.TestDispatcherServlet - Completed initialization in 2 ms
+10:23:16.015 INFO  [main] c.l.p.controller.CartControllerTest - Started CartControllerTest in 3.795 seconds (process running for 5.077)
+10:23:24.254 INFO  [background-preinit] o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+10:23:24.289 INFO  [main] c.l.p.controller.CartControllerTest - Starting CartControllerTest using Java 21 with PID 29632 (started by 2440540 in C:\2440540\JFS Training Project\Library-Management)
+10:23:24.289 DEBUG [main] c.l.p.controller.CartControllerTest - Running with Spring Boot v3.3.1, Spring v6.1.10
+10:23:24.290 INFO  [main] c.l.p.controller.CartControllerTest - No active profile set, falling back to 1 default profile: "default"
+10:23:27.081 WARN  [main] o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 5fd1f96a-a3d0-4610-8a06-66da36e1ae9d
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+10:23:27.130 INFO  [main] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+10:23:27.418 DEBUG [main] c.l.p.s.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+10:23:27.429 INFO  [main] o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+10:23:27.429 INFO  [main] o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+10:23:27.431 INFO  [main] o.s.t.w.s.TestDispatcherServlet - Completed initialization in 2 ms
+10:23:27.477 INFO  [main] c.l.p.controller.CartControllerTest - Started CartControllerTest in 3.65 seconds (process running for 5.12)
