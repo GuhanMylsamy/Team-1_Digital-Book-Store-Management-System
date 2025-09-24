@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
         user.setFullName(userRequestDTO.getFullName());
         user.setEmail(userRequestDTO.getEmail());
         user.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
-        user.setRole(userRequestDTO.getRole());
+        user.setRole(Role.USER);
         return userRepository.save(user);
     }
 
@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllCustomers() {
-        return userRepository.findByRole(Role.USER);
+        return userRepository.findByRole(Role.ADMIN);
     }
 
     @Override
