@@ -3,7 +3,6 @@ package com.libraryManagement.project;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class ProjectApplication {
@@ -17,6 +16,7 @@ public class ProjectApplication {
 		System.setProperty("db.password",password);
 		System.setProperty("db.username",username);
 		System.setProperty("db.url",url);
+
 
 
 		SpringApplication.run(ProjectApplication.class, args);
