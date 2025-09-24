@@ -22,7 +22,6 @@ public class GlobalLoggingAspect {
     private static final Logger LOGGER = LoggerFactory.getLogger(GlobalLoggingAspect.class);
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    // 👇 THIS IS THE FIX: A more specific pointcut
     @Pointcut("within(com.libraryManagement.project.controller..*) || " +
             "within(com.libraryManagement.project.service..*) || " +
             "within(com.libraryManagement.project.repository..*)")
