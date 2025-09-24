@@ -9,7 +9,7 @@ nbbuild/
 nbdist/
 .nb-gradle/
 logs/
-
+#Added logs in gitignore
 # Maven wrapper
 .mvn/wrapper/maven-wrapper.jar
 
