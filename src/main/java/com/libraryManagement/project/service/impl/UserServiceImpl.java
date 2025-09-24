@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
         user.setFullName(userRequestDTO.getFullName());
         user.setEmail(userRequestDTO.getEmail());
         user.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
-        user.setRole(userRequestDTO.getRole()); // pta nhi q do do baar hai get role yeha
+        user.setRole(Role.USER);
         return userRepository.save(user);
     }
 

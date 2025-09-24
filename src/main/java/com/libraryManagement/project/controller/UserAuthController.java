@@ -44,7 +44,7 @@ public class UserAuthController {
 
     /**
      * Handles new user registration.
-     * Validation is now handled by @Valid. Error responses are managed by the GlobalExceptionHandler.
+     * Validation is now handled by @Valid.
      */
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody @Valid UserRequestDTO userRequestDTO) {
@@ -54,7 +54,6 @@ public class UserAuthController {
 
     /**
      * Authenticates a user and returns a JWT.
-     * Exceptions like BadCredentialsException are caught by the GlobalExceptionHandler.
      */
     // In UserAuthController.java
 
