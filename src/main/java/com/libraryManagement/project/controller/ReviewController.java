@@ -28,7 +28,6 @@ public class ReviewController {
 
     private final UserRepository userRepository;
 
-    @Autowired
     public ReviewController(ReviewServiceImpl reviewService, BookRepository bookRepository, UserRepository userRepository) {
         this.reviewService = reviewService;
         this.bookRepository = bookRepository;
@@ -80,7 +79,7 @@ public class ReviewController {
     }
 
     @DeleteMapping("/deleteByAdmin/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> deleteReviewByAdmin(@PathVariable Long id) {
         reviewService.deleteReviewByAdmin(id);
         return ResponseEntity.ok("Review deleted successfully.");

@@ -1,9 +1,7 @@
 package com.libraryManagement.project.security;
 
 import com.libraryManagement.project.enums.Role;
-import com.libraryManagement.project.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -17,8 +15,6 @@ import java.util.Date;
 public class JwtUtil {
 
     private SecretKey key;
-//    @Autowired
-//    private UserRepository userRepository;
 
     @PostConstruct
     public void init() {

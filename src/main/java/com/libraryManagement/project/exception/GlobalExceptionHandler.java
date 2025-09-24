@@ -23,21 +23,21 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
-    // Handles validation failures from @Valid annotations.
-//    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex, HttpServletRequest request) {
-//        // Collect all validation error messages into a single string.
-//        String validationErrors = ex.getBindingResult().getFieldErrors().stream()
-//                .map(error -> STR."'\{error.getField()}': \{error.getDefaultMessage()}")
-//                .collect(Collectors.joining(", "));
-//
-//        ErrorResponse errorResponse = new ErrorResponse(
-//                HttpStatus.BAD_REQUEST,
-//                STR."Validation failed: \{validationErrors}",
-//                request.getRequestURI()
-//        );
-//        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-//    }
+//     Handles validation failures from @Valid annotations.
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex, HttpServletRequest request) {
+        // Collect all validation error messages into a single string.
+        String validationErrors = ex.getBindingResult().getFieldErrors().stream()
+                .map(error -> STR."'\{error.getField()}': \{error.getDefaultMessage()}")
+                .collect(Collectors.joining(", "));
+
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                STR."Validation failed: \{validationErrors}",
+                request.getRequestURI()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
 
     // Handles failed login attempts (incorrect email/password).
     @ExceptionHandler(BadCredentialsException.class)
