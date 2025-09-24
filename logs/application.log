@@ -8310,3 +8310,119 @@ java.sql.SQLIntegrityConstraintViolationException: Cannot delete or update a par
 18:10:01.193 INFO  [SpringApplicationShutdownHook] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 18:10:01.196 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 18:10:01.225 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+11:04:06.497 INFO  [background-preinit] o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+11:04:06.606 INFO  [main] c.l.project.ProjectApplication - Starting ProjectApplication using Java 21 with PID 19716 (C:\Users\2440757\OneDrive - Cognizant\Documents\24 changed\Team-1_Digital-Book-Store-Management-System\target\classes started by 2440757 in C:\Users\2440757\OneDrive - Cognizant\Documents\24 changed\Team-1_Digital-Book-Store-Management-System)
+11:04:06.608 DEBUG [main] c.l.project.ProjectApplication - Running with Spring Boot v3.3.1, Spring v6.1.10
+11:04:06.617 INFO  [main] c.l.project.ProjectApplication - No active profile set, falling back to 1 default profile: "default"
+11:04:09.000 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+11:04:09.157 INFO  [main] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 150 ms. Found 12 JPA repository interfaces.
+11:04:10.470 INFO  [main] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+11:04:10.486 INFO  [main] o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+11:04:10.488 INFO  [main] o.a.catalina.core.StandardService - Starting service [Tomcat]
+11:04:10.488 INFO  [main] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.25]
+11:04:10.589 INFO  [main] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+11:04:10.589 INFO  [main] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3871 ms
+11:04:10.945 DEBUG [main] c.l.p.s.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+11:04:11.179 INFO  [main] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+11:04:11.270 INFO  [main] org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.2.Final
+11:04:11.323 INFO  [main] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+11:04:11.732 INFO  [main] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+11:04:11.753 INFO  [main] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+11:04:12.031 INFO  [main] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@796cf2b5
+11:04:12.034 INFO  [main] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+11:04:12.095 WARN  [main] org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+11:04:13.215 INFO  [main] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+11:04:14.555 INFO  [main] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+11:04:15.324 INFO  [main] o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+11:04:16.882 WARN  [main] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+11:04:16.936 INFO  [main] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name userServiceImpl
+11:04:17.626 INFO  [main] o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+11:04:18.431 INFO  [main] o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+11:04:18.445 INFO  [main] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+11:04:18.456 INFO  [main] c.l.project.ProjectApplication - Started ProjectApplication in 12.96 seconds (process running for 13.946)
+11:04:39.446 INFO  [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+11:04:39.447 INFO  [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+11:04:39.451 INFO  [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet - Completed initialization in 4 ms
+11:15:19.973 INFO  [background-preinit] o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+11:15:20.024 INFO  [main] c.l.p.controller.CartControllerTest - Starting CartControllerTest using Java 21 with PID 27572 (started by 2440757 in C:\Users\2440757\OneDrive - Cognizant\Documents\24 changed\Team-1_Digital-Book-Store-Management-System)
+11:15:20.024 DEBUG [main] c.l.p.controller.CartControllerTest - Running with Spring Boot v3.3.1, Spring v6.1.10
+11:15:20.025 INFO  [main] c.l.p.controller.CartControllerTest - No active profile set, falling back to 1 default profile: "default"
+11:15:23.078 WARN  [main] o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 68696fb6-83d3-4d4b-bd28-6efa835bfe57
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+11:15:23.128 INFO  [main] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+11:15:23.383 DEBUG [main] c.l.p.s.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+11:15:23.393 INFO  [main] o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+11:15:23.393 INFO  [main] o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+11:15:23.395 INFO  [main] o.s.t.w.s.TestDispatcherServlet - Completed initialization in 2 ms
+11:15:23.444 INFO  [main] c.l.p.controller.CartControllerTest - Started CartControllerTest in 3.993 seconds (process running for 5.384)
+11:15:43.419 INFO  [background-preinit] o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+11:15:43.460 INFO  [main] c.l.p.controller.CartControllerTest - Starting CartControllerTest using Java 21 with PID 3868 (started by 2440757 in C:\Users\2440757\OneDrive - Cognizant\Documents\24 changed\Team-1_Digital-Book-Store-Management-System)
+11:15:43.460 DEBUG [main] c.l.p.controller.CartControllerTest - Running with Spring Boot v3.3.1, Spring v6.1.10
+11:15:43.461 INFO  [main] c.l.p.controller.CartControllerTest - No active profile set, falling back to 1 default profile: "default"
+11:15:46.003 WARN  [main] o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 5444dcf8-0afa-44b3-97ed-9901b86a593b
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+11:15:46.054 INFO  [main] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+11:15:46.423 DEBUG [main] c.l.p.s.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+11:15:46.435 INFO  [main] o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+11:15:46.436 INFO  [main] o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+11:15:46.437 INFO  [main] o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+11:15:46.487 INFO  [main] c.l.p.controller.CartControllerTest - Started CartControllerTest in 3.512 seconds (process running for 4.657)
+11:16:56.791 INFO  [background-preinit] o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+11:16:56.824 INFO  [main] c.l.p.controller.CartControllerTest - Starting CartControllerTest using Java 21 with PID 30600 (started by 2440757 in C:\Users\2440757\OneDrive - Cognizant\Documents\24 changed\Team-1_Digital-Book-Store-Management-System)
+11:16:56.825 DEBUG [main] c.l.p.controller.CartControllerTest - Running with Spring Boot v3.3.1, Spring v6.1.10
+11:16:56.825 INFO  [main] c.l.p.controller.CartControllerTest - No active profile set, falling back to 1 default profile: "default"
+11:16:59.157 WARN  [main] o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: a18b6ae4-fc54-404f-ae9f-7f6ed9793c83
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+11:16:59.191 INFO  [main] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+11:16:59.392 DEBUG [main] c.l.p.s.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+11:16:59.399 INFO  [main] o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+11:16:59.400 INFO  [main] o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+11:16:59.401 INFO  [main] o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+11:16:59.440 INFO  [main] c.l.p.controller.CartControllerTest - Started CartControllerTest in 3.032 seconds (process running for 4.054)
+11:21:29.305 INFO  [background-preinit] o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+11:21:29.353 INFO  [main] c.l.p.controller.CartControllerTest - Starting CartControllerTest using Java 21 with PID 20600 (started by 2440757 in C:\Users\2440757\OneDrive - Cognizant\Documents\24 changed\Team-1_Digital-Book-Store-Management-System)
+11:21:29.354 DEBUG [main] c.l.p.controller.CartControllerTest - Running with Spring Boot v3.3.1, Spring v6.1.10
+11:21:29.355 INFO  [main] c.l.p.controller.CartControllerTest - No active profile set, falling back to 1 default profile: "default"
+11:21:32.218 WARN  [main] o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 5297d680-6e85-4430-a5b9-08368d814920
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+11:21:32.257 INFO  [main] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+11:21:32.469 DEBUG [main] c.l.p.s.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+11:21:32.484 INFO  [main] o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+11:21:32.485 INFO  [main] o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+11:21:32.487 INFO  [main] o.s.t.w.s.TestDispatcherServlet - Completed initialization in 2 ms
+11:21:32.536 INFO  [main] c.l.p.controller.CartControllerTest - Started CartControllerTest in 4.008 seconds (process running for 5.282)
+11:21:46.062 INFO  [background-preinit] o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+11:21:46.113 INFO  [main] c.l.p.controller.CartControllerTest - Starting CartControllerTest using Java 21 with PID 15872 (started by 2440757 in C:\Users\2440757\OneDrive - Cognizant\Documents\24 changed\Team-1_Digital-Book-Store-Management-System)
+11:21:46.113 DEBUG [main] c.l.p.controller.CartControllerTest - Running with Spring Boot v3.3.1, Spring v6.1.10
+11:21:46.114 INFO  [main] c.l.p.controller.CartControllerTest - No active profile set, falling back to 1 default profile: "default"
+11:21:48.772 WARN  [main] o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 0188c921-e160-450d-a299-af90c425cece
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+11:21:48.818 INFO  [main] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+11:21:49.122 DEBUG [main] c.l.p.s.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+11:21:49.132 INFO  [main] o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+11:21:49.133 INFO  [main] o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+11:21:49.134 INFO  [main] o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+11:21:49.179 INFO  [main] c.l.p.controller.CartControllerTest - Started CartControllerTest in 3.763 seconds (process running for 4.912)
+11:25:06.378 INFO  [SpringApplicationShutdownHook] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+11:25:06.391 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+11:25:06.425 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
