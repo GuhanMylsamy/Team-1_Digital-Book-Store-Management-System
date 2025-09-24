@@ -58,7 +58,6 @@ class UserServiceImplTest {
         userRequestDTO.setEmail("test@example.com");
         userRequestDTO.setFullName("Test User");
         userRequestDTO.setPassword("password123");
-        userRequestDTO.setRole(Role.USER);
     }
 
     @Test
