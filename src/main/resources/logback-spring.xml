@@ -1,51 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-    <property name="LOG_PATH" value="logs" />
-    <property name="LOG_PATTERN" value="%d{HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n" />
-
-    <!-- Appender to log to the console -->
-    <appender name="CONSOLE_APPENDER" class="ch.qos.logback.core.ConsoleAppender">
+    <!-- Console Appender -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <Pattern>${LOG_PATTERN}</Pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 
-    <!-- Appender to log to a single, rolling file -->
-    <appender name="FILE_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_PATH}/application.log</file>
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <Pattern>${LOG_PATTERN}</Pattern>
-        </encoder>
-
-        <!--
-          CORRECTED SECTION:
-          This policy handles both size and time-based rolling.
-          It will create a new log file when the current one reaches 10MB
-          or when the date changes.
-        -->
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <!-- path to archived log files -->
-            <fileNamePattern>${LOG_PATH}/archived/application-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
-            <!-- each file should be at most 10MB, keep 30 days of history, but max 500MB total-->
-            <maxFileSize>10MB</maxFileSize>
+    <!-- General Application Log -->
+    <appender name="APP_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/app.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/app.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
-            <totalSizeCap>500MB</totalSizeCap>
         </rollingPolicy>
-
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
     </appender>
 
-    <!-- Configure logging for your application's package -->
-    <logger name="com.libraryManagement.project" level="DEBUG" additivity="false">
-        <appender-ref ref="FILE_APPENDER" />
-        <appender-ref ref="CONSOLE_APPENDER" />
-    </logger>
+    <!-- Aspect-Specific Log -->
+    <appender name="ASPECT_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/aspect.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/aspect.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level - %msg%n</pattern>
+        </encoder>
+    </appender>
 
-    <!-- Root logger for all other logs (e.g., Spring Framework) -->
+    <!-- Root Logger -->
     <root level="INFO">
-        <appender-ref ref="CONSOLE_APPENDER" />
-        <appender-ref ref="FILE_APPENDER" />
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="APP_FILE" />
     </root>
 
-</configuration>
+    <!-- Logger for GlobalLoggingAspect -->
+    <logger name="com.libraryManagement.project.aspect.GlobalLoggingAspect" level="INFO" additivity="false">
+        <appender-ref ref="ASPECT_FILE" />
+        <appender-ref ref="CONSOLE" />
+    </logger>
 
+</configuration>
