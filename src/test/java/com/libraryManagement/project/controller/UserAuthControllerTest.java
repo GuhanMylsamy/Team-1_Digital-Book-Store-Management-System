@@ -47,7 +47,7 @@ class UserAuthControllerTest {
 
     @Test
     void registerUser_Success() throws Exception {
-        UserRequestDTO requestDTO = new UserRequestDTO("newuser@example.com", "New User", "password123", Role.USER);
+        UserRequestDTO requestDTO = new UserRequestDTO("newuser@example.com", "New User", "password123");
         User user = new User();
         when(userService.registerUser(any(UserRequestDTO.class))).thenReturn(user);
 

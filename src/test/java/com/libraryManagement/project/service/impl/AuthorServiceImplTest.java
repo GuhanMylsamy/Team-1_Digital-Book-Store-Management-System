@@ -1,124 +1,137 @@
 package com.libraryManagement.project.service.impl;
 
-// Imports
 import com.libraryManagement.project.entity.Author;
 import com.libraryManagement.project.exception.ResourceNotFoundException;
 import com.libraryManagement.project.repository.AuthorRepository;
 import com.libraryManagement.project.repository.BookRepository;
-import com.libraryManagement.project.service.impl.AuthorServiceImpl;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.ResponseEntity;
 
 import java.util.Optional;
+import java.util.Collections;
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(MockitoExtension.class)
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 public class AuthorServiceImplTest {
 
-    @Mock
     private AuthorRepository authorRepository;
-
-    @Mock
     private BookRepository bookRepository;
-
-    @InjectMocks
     private AuthorServiceImpl authorService;
 
+    private Author author;
+
+    @BeforeEach
+    public void setup() {
+        authorRepository = mock(AuthorRepository.class);
+        bookRepository = mock(BookRepository.class);
+        authorService = new AuthorServiceImpl(authorRepository, bookRepository);
+
+        author = new Author();
+        author.setAuthorId(1L);
+        author.setName("George Orwell");
+    }
+
     @Test
-    void testGetAllAuthors() {
-        Mockito.when(authorRepository.findAll()).thenReturn(List.of(new Author(1L, "John")));
+    public void testGetAllAuthors() {
+        when(authorRepository.findAll()).thenReturn(Collections.singletonList(author));
+
         List<Author> authors = authorService.getAllAuthors();
         assertEquals(1, authors.size());
+        assertEquals("George Orwell", authors.get(0).getName());
     }
 
     @Test
-    void testGetAuthorById_Found() {
-        Mockito.when(authorRepository.findById(1L)).thenReturn(Optional.of(new Author(1L, "Jane")));
-        Author author = authorService.getAuthorById(1L);
-        assertEquals("Jane", author.getName());
+    public void testGetAuthorById_Found() {
+        when(authorRepository.findById(1L)).thenReturn(Optional.of(author));
+
+        Author result = authorService.getAuthorById(1L);
+        assertEquals("George Orwell", result.getName());
     }
 
     @Test
-    void testGetAuthorById_NotFound() {
-        Mockito.when(authorRepository.findById(2L)).thenReturn(Optional.empty());
+    public void testGetAuthorById_NotFound() {
+        when(authorRepository.findById(2L)).thenReturn(Optional.empty());
+
         assertThrows(ResourceNotFoundException.class, () -> authorService.getAuthorById(2L));
     }
 
     @Test
-    void testGetAuthorByName_Found() {
-        Mockito.when(authorRepository.findByName("Alice")).thenReturn(Optional.of(new Author(2L, "Alice")));
-        Author author = authorService.getAuthorByName("Alice");
-        assertEquals("Alice", author.getName());
+    public void testGetAuthorByName_Found() {
+        when(authorRepository.findByName("George Orwell")).thenReturn(Optional.of(author));
+
+        Author result = authorService.getAuthorByName("George Orwell");
+        assertEquals(1L, result.getAuthorId());
     }
 
     @Test
-    void testGetAuthorByName_NotFound() {
-        Mockito.when(authorRepository.findByName("Bob")).thenReturn(Optional.empty());
-        assertThrows(ResourceNotFoundException.class, () -> authorService.getAuthorByName("Bob"));
+    public void testGetAuthorByName_NotFound() {
+        when(authorRepository.findByName("Unknown")).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> authorService.getAuthorByName("Unknown"));
     }
 
     @Test
-    void testAddAuthor_Success() {
-        Author author = new Author(null, "NewAuthor");
-        Mockito.when(authorRepository.existsByName("NewAuthor")).thenReturn(false);
-        Mockito.when(authorRepository.save(author)).thenReturn(new Author(3L, "NewAuthor"));
+    public void testAddAuthor_Success() {
+        when(authorRepository.existsByName("George Orwell")).thenReturn(false);
+        when(authorRepository.save(author)).thenReturn(author);
 
-        Author saved = authorService.addAuthor(author);
-        assertEquals("NewAuthor", saved.getName());
+        Author result = authorService.addAuthor(author);
+        assertEquals("George Orwell", result.getName());
     }
 
     @Test
-    void testAddAuthor_AlreadyExists() {
-        Author author = new Author(null, "ExistingAuthor");
-        Mockito.when(authorRepository.existsByName("ExistingAuthor")).thenReturn(true);
+    public void testAddAuthor_AlreadyExists() {
+        when(authorRepository.existsByName("George Orwell")).thenReturn(true);
 
         assertThrows(IllegalArgumentException.class, () -> authorService.addAuthor(author));
     }
 
     @Test
-    void testUpdateAuthor_Success() {
-        Author existing = new Author(1L, "OldName");
-        Author updatedDetails = new Author(null, "NewName");
+    public void testUpdateAuthor_Success() {
+        Author updated = new Author();
+        updated.setName("Eric Blair");
 
-        Mockito.when(authorRepository.findById(1L)).thenReturn(Optional.of(existing));
-        Mockito.when(authorRepository.save(existing)).thenReturn(new Author(1L, "NewName"));
+        when(authorRepository.findById(1L)).thenReturn(Optional.of(author));
+        when(authorRepository.save(any(Author.class))).thenReturn(updated);
 
-        Author updated = authorService.updateAuthor(1L, updatedDetails);
-        assertEquals("NewName", updated.getName());
+        Author result = authorService.updateAuthor(1L, updated);
+        assertEquals("Eric Blair", result.getName());
     }
 
     @Test
-    void testUpdateAuthor_NotFound() {
-        Mockito.when(authorRepository.findById(99L)).thenReturn(Optional.empty());
-        assertThrows(IllegalArgumentException.class, () -> authorService.updateAuthor(99L, new Author(null, "Name")));
+    public void testUpdateAuthor_NotFound() {
+        when(authorRepository.findById(2L)).thenReturn(Optional.empty());
+
+        Author updated = new Author();
+        updated.setName("New Name");
+
+        assertThrows(IllegalArgumentException.class, () -> authorService.updateAuthor(2L, updated));
     }
 
     @Test
-    void testDeleteAuthor_Success() {
-        Mockito.when(authorRepository.existsById(1L)).thenReturn(true);
-        Mockito.when(bookRepository.existsByAuthor_AuthorId(1L)).thenReturn(false);
+    public void testDeleteAuthor_Success() {
+        when(authorRepository.existsById(1L)).thenReturn(true);
+        when(bookRepository.existsByAuthor_AuthorId(1L)).thenReturn(false);
 
-        ResponseEntity<String> response = authorService.deleteAuthor(1L);
-        assertEquals("Author deleted successfully!", response.getBody());
+        assertDoesNotThrow(() -> authorService.deleteAuthor(1L));
+        verify(authorRepository, times(1)).deleteById(1L);
     }
 
     @Test
-    void testDeleteAuthor_NotFound() {
-        Mockito.when(authorRepository.existsById(2L)).thenReturn(false);
+    public void testDeleteAuthor_NotFound() {
+        when(authorRepository.existsById(2L)).thenReturn(false);
+
         assertThrows(ResourceNotFoundException.class, () -> authorService.deleteAuthor(2L));
     }
 
     @Test
-    void testDeleteAuthor_UsedByBooks() {
-        Mockito.when(authorRepository.existsById(3L)).thenReturn(true);
-        Mockito.when(bookRepository.existsByAuthor_AuthorId(3L)).thenReturn(true);
-        assertThrows(IllegalArgumentException.class, () -> authorService.deleteAuthor(3L));
+    public void testDeleteAuthor_UsedByBooks() {
+        when(authorRepository.existsById(1L)).thenReturn(true);
+        when(bookRepository.existsByAuthor_AuthorId(1L)).thenReturn(true);
+
+        assertThrows(IllegalArgumentException.class, () -> authorService.deleteAuthor(1L));
     }
 }
-

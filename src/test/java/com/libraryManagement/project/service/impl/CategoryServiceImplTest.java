@@ -3,80 +3,96 @@ package com.libraryManagement.project.service.impl;
 import com.libraryManagement.project.entity.Category;
 import com.libraryManagement.project.repository.BookRepository;
 import com.libraryManagement.project.repository.CategoryRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 
-import java.util.*;
+import java.util.Optional;
+import java.util.List;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 public class CategoryServiceImplTest {
 
-    @Mock private CategoryRepository categoryRepository;
-    @Mock private BookRepository bookRepository;
+    private CategoryRepository categoryRepository;
+    private BookRepository bookRepository;
+    private CategoryServiceImpl categoryService;
 
-    @InjectMocks private CategoryServiceImpl categoryService;
+    private Category category;
+
+    @BeforeEach
+    void setUp() {
+        categoryRepository = mock(CategoryRepository.class);
+        bookRepository = mock(BookRepository.class);
+        categoryService = new CategoryServiceImpl(categoryRepository, bookRepository);
+
+        category = new Category();
+        category.setCategoryId(1L);
+        category.setName("Fiction");
+    }
 
     @Test
     void testGetAllCategories() {
-        when(categoryRepository.findAll()).thenReturn(List.of(new Category(1L, "Fiction")));
-        List<Category> categories = categoryService.getAllCategories();
-        assertEquals(1, categories.size());
-        assertEquals("Fiction", categories.get(0).getName());
+        when(categoryRepository.findAll()).thenReturn(Collections.singletonList(category));
+
+        List<Category> result = categoryService.getAllCategories();
+        assertEquals(1, result.size());
+        assertEquals("Fiction", result.get(0).getName());
     }
 
     @Test
     void testGetCategoryById_Found() {
-        when(categoryRepository.findById(1L)).thenReturn(Optional.of(new Category(1L, "Science")));
-        Category category = categoryService.getCategoryById(1L);
-        assertEquals("Science", category.getName());
+        when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
+
+        Category result = categoryService.getCategoryById(1L);
+        assertEquals("Fiction", result.getName());
     }
 
     @Test
     void testGetCategoryById_NotFound() {
-        when(categoryRepository.findById(99L)).thenReturn(Optional.empty());
-        assertThrows(IllegalArgumentException.class, () -> categoryService.getCategoryById(99L));
+        when(categoryRepository.findById(2L)).thenReturn(Optional.empty());
+
+        assertThrows(IllegalArgumentException.class, () -> categoryService.getCategoryById(2L));
     }
 
     @Test
     void testAddCategory_Success() {
-        Category category = new Category(null, "History");
-        when(categoryRepository.existsByName("History")).thenReturn(false);
-        when(categoryRepository.save(category)).thenReturn(new Category(1L, "History"));
+        when(categoryRepository.existsByName("Fiction")).thenReturn(false);
+        when(categoryRepository.save(category)).thenReturn(category);
 
-        Category saved = categoryService.addCategory(category);
-        assertEquals("History", saved.getName());
+        Category result = categoryService.addCategory(category);
+        assertEquals("Fiction", result.getName());
     }
 
     @Test
     void testAddCategory_AlreadyExists() {
-        Category category = new Category(null, "History");
-        when(categoryRepository.existsByName("History")).thenReturn(true);
+        when(categoryRepository.existsByName("Fiction")).thenReturn(true);
+
         assertThrows(IllegalArgumentException.class, () -> categoryService.addCategory(category));
     }
 
     @Test
     void testUpdateCategory_Success() {
-        Category existing = new Category(1L, "OldName");
-        Category updatedDetails = new Category(null, "NewName");
+        Category updated = new Category();
+        updated.setName("Drama");
 
-        when(categoryRepository.findById(1L)).thenReturn(Optional.of(existing));
-        when(categoryRepository.save(existing)).thenReturn(new Category(1L, "NewName"));
+        when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
+        when(categoryRepository.save(any(Category.class))).thenReturn(updated);
 
-        Category updated = categoryService.updateCategory(1L, updatedDetails);
-        assertEquals("NewName", updated.getName());
+        Category result = categoryService.updateCategory(1L, updated);
+        assertEquals("Drama", result.getName());
     }
 
     @Test
     void testUpdateCategory_NotFound() {
-        when(categoryRepository.findById(99L)).thenReturn(Optional.empty());
-        Category updatedDetails = new Category(null, "NewName");
-        assertThrows(IllegalArgumentException.class, () -> categoryService.updateCategory(99L, updatedDetails));
+        when(categoryRepository.findById(2L)).thenReturn(Optional.empty());
+
+        Category updated = new Category();
+        updated.setName("Drama");
+
+        assertThrows(IllegalArgumentException.class, () -> categoryService.updateCategory(2L, updated));
     }
 
     @Test
@@ -86,12 +102,14 @@ public class CategoryServiceImplTest {
 
         ResponseEntity<?> response = categoryService.deleteCategory(1L);
         assertEquals("Category deleted successfully!", response.getBody());
+        verify(categoryRepository).deleteById(1L);
     }
 
     @Test
     void testDeleteCategory_NotFound() {
-        when(categoryRepository.existsById(99L)).thenReturn(false);
-        assertThrows(IllegalArgumentException.class, () -> categoryService.deleteCategory(99L));
+        when(categoryRepository.existsById(2L)).thenReturn(false);
+
+        assertThrows(IllegalArgumentException.class, () -> categoryService.deleteCategory(2L));
     }
 
     @Test
@@ -101,6 +119,6 @@ public class CategoryServiceImplTest {
 
         ResponseEntity<?> response = categoryService.deleteCategory(1L);
         assertEquals("Category name is used by other books, Deletion is not supported.", response.getBody());
+        verify(categoryRepository, never()).deleteById(anyLong());
     }
 }
-

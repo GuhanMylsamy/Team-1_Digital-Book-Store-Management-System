@@ -34,9 +34,7 @@ public class UserAuthController {
         this.userRepository = userRepository;
     }
 
-    /**
-     * A simple welcome endpoint to test if the API is up.
-     */
+
     @GetMapping("/welcome")
     public String welcome() {
         return "Welcome, this endpoint is not secure!";
@@ -55,7 +53,6 @@ public class UserAuthController {
     /**
      * Authenticates a user and returns a JWT.
      */
-    // In UserAuthController.java
 
     @PostMapping("/login")
     public ResponseEntity<UserAuthResponseDTO> authenticateAndGetToken(@RequestBody @Valid UserAuthRequestDTO authRequestDTO) {

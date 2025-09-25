@@ -1,19 +1,28 @@
 package com.libraryManagement.project.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.libraryManagement.project.dto.requestDTO.BookRequestDTO;
 import com.libraryManagement.project.dto.responseDTO.BookResponseDTO;
+import com.libraryManagement.project.security.JwtUtil;
 import com.libraryManagement.project.service.impl.BookServiceImpl;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -26,108 +35,137 @@ public class BookControllerTest {
     @MockBean
     private BookServiceImpl bookService;
 
+    @MockBean
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    private BookResponseDTO bookResponseDTO;
+    private BookRequestDTO bookRequestDTO;
+
+    @BeforeEach
+    void setUp() {
+        bookResponseDTO = new BookResponseDTO();
+        bookResponseDTO.setBookId(1L);
+        bookResponseDTO.setTitle("1984");
+        bookResponseDTO.setAuthorName("George Orwell");
+        bookResponseDTO.setCategoryName("Dystopian");
+        bookResponseDTO.setPrice(299.99);
+
+        bookRequestDTO = new BookRequestDTO();
+        bookRequestDTO.setTitle("1984");
+        bookRequestDTO.setAuthorName("Thomas");
+        bookRequestDTO.setCategoryName("Fiction");
+        bookRequestDTO.setPrice(299.99);
+    }
+
     @Test
+    @WithMockUser
     void testGetAllBooks() throws Exception {
-        BookResponseDTO book = new BookResponseDTO(1L, "Title", "Author", "Category");
-        Mockito.when(bookService.getAllBooks()).thenReturn(List.of(book));
+        when(bookService.getAllBooks()).thenReturn(Collections.singletonList(bookResponseDTO));
 
         mockMvc.perform(get("/api/v1/books"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].title").value("Title"));
+                .andExpect(jsonPath("$[0].title").value("1984"));
     }
 
     @Test
+    @WithMockUser
     void testGetBookById() throws Exception {
-        BookResponseDTO book = new BookResponseDTO(1L, "Title", "Author", "Category");
-        Mockito.when(bookService.getBookById(1L)).thenReturn(book);
+        when(bookService.getBookById(1L)).thenReturn(bookResponseDTO);
 
         mockMvc.perform(get("/api/v1/books/get/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title").value("Title"));
+                .andExpect(jsonPath("$.title").value("1984"));
     }
 
     @Test
+    @WithMockUser(authorities = "ADMIN")
     void testGetBooksByAuthorId() throws Exception {
-        BookResponseDTO book = new BookResponseDTO(1L, "Title", "Author", "Category");
-        Mockito.when(bookService.getBooksByAuthor(1L)).thenReturn(List.of(book));
+        when(bookService.getBooksByAuthor(1L)).thenReturn(Collections.singletonList(bookResponseDTO));
 
         mockMvc.perform(get("/api/v1/books/author/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].author").value("Author"));
+                .andExpect(jsonPath("$[0].authorName").value("George Orwell"));
     }
 
     @Test
+    @WithMockUser(authorities = "ADMIN")
     void testGetBooksByCategoryId() throws Exception {
-        BookResponseDTO book = new BookResponseDTO(1L, "Title", "Author", "Category");
-        Mockito.when(bookService.getBooksByCategory(1L)).thenReturn(List.of(book));
+        when(bookService.getBooksByCategory(1L)).thenReturn(Collections.singletonList(bookResponseDTO));
 
         mockMvc.perform(get("/api/v1/books/category/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].category").value("Category"));
+                .andExpect(jsonPath("$[0].categoryName").value("Dystopian"));
     }
 
     @Test
+    @WithMockUser(authorities = "ADMIN")
     void testAddBook() throws Exception {
-        BookRequestDTO request = new BookRequestDTO("Title", "Author", "Category");
-        BookResponseDTO response = new BookResponseDTO(1L, "Title", "Author", "Category");
-
-        Mockito.when(bookService.addBook(Mockito.any())).thenReturn(response);
+        when(bookService.addBook(any(BookRequestDTO.class))).thenReturn(bookResponseDTO);
 
         mockMvc.perform(post("/api/v1/books/addBook")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"title\":\"Title\",\"authorName\":\"Author\",\"categoryName\":\"Category\"}"))
+                        .content(objectMapper.writeValueAsString(bookRequestDTO)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.title").value("Title"));
+                .andExpect(jsonPath("$.title").value("1984"));
     }
 
     @Test
+    @WithMockUser(authorities = "ADMIN")
     void testUpdateBook() throws Exception {
-        BookResponseDTO response = new BookResponseDTO(1L, "Updated", "Author", "Category");
-
-        Mockito.when(bookService.updateBook(Mockito.eq(1L), Mockito.any())).thenReturn(response);
+        when(bookService.updateBook(anyLong(), any(BookRequestDTO.class))).thenReturn(bookResponseDTO);
 
         mockMvc.perform(put("/api/v1/books/update/1")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"title\":\"Updated\",\"authorName\":\"Author\",\"categoryName\":\"Category\"}"))
+                        .content(objectMapper.writeValueAsString(bookRequestDTO)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title").value("Updated"));
+                .andExpect(jsonPath("$.title").value("1984"));
     }
 
     @Test
+    @WithMockUser
     void testFindBooksByTitle() throws Exception {
-        BookResponseDTO book = new BookResponseDTO(1L, "Title", "Author", "Category");
-        Mockito.when(bookService.findBooksByTitle("Title")).thenReturn(List.of(book));
+        when(bookService.findBooksByTitle("1984")).thenReturn(Collections.singletonList(bookResponseDTO));
 
-        mockMvc.perform(get("/api/v1/books/findByTitle").param("title", "Title"))
+        mockMvc.perform(get("/api/v1/books/findByTitle")
+                        .param("title", "1984"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].title").value("Title"));
+                .andExpect(jsonPath("$[0].title").value("1984"));
     }
 
     @Test
+    @WithMockUser
     void testFindBooksByAuthorName() throws Exception {
-        BookResponseDTO book = new BookResponseDTO(1L, "Title", "Author", "Category");
-        Mockito.when(bookService.findBooksByAuthor("Author")).thenReturn(List.of(book));
+        when(bookService.findBooksByAuthor("George Orwell")).thenReturn(Collections.singletonList(bookResponseDTO));
 
-        mockMvc.perform(get("/api/v1/books/findByAuthor").param("authorName", "Author"))
+        mockMvc.perform(get("/api/v1/books/findByAuthor")
+                        .param("authorName", "George Orwell"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].author").value("Author"));
+                .andExpect(jsonPath("$[0].authorName").value("George Orwell"));
     }
 
     @Test
+    @WithMockUser
     void testFindBooksByCategoryName() throws Exception {
-        BookResponseDTO book = new BookResponseDTO(1L, "Title", "Author", "Category");
-        Mockito.when(bookService.findBooksByCategory("Category")).thenReturn(List.of(book));
+        when(bookService.findBooksByCategory("Dystopian")).thenReturn(Collections.singletonList(bookResponseDTO));
 
-        mockMvc.perform(get("/api/v1/books/findByCategory").param("categoryName", "Category"))
+        mockMvc.perform(get("/api/v1/books/findByCategory")
+                        .param("categoryName", "Dystopian"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].category").value("Category"));
+                .andExpect(jsonPath("$[0].categoryName").value("Dystopian"));
     }
 
     @Test
+    @WithMockUser(authorities = "ADMIN")
     void testDeleteBook() throws Exception {
-        Mockito.doNothing().when(bookService).deleteBook(1L);
+        doNothing().when(bookService).deleteBook(1L);
 
-        mockMvc.perform(delete("/api/v1/books/delete/1"))
+        mockMvc.perform(delete("/api/v1/books/delete/1")
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.Message").value("Book deleted successfully"));
     }
