@@ -6,6 +6,7 @@ import com.libraryManagement.project.dto.responseDTO.OrderResponseDTO;
 import com.libraryManagement.project.entity.Order;
 import com.libraryManagement.project.entity.OrderItems;
 import com.libraryManagement.project.service.impl.OrderServiceImpl;
+import com.libraryManagement.project.util.SecurityUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,7 +19,7 @@ import java.util.List;
 public class OrderController {
 
     private final OrderServiceImpl orderService;
-    //Constructor Injection
+
     public OrderController(OrderServiceImpl orderService){
         this.orderService = orderService;
     }
@@ -43,8 +44,9 @@ public class OrderController {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    @GetMapping("/orders/user/{userId}")
-    public ResponseEntity<List<OrderItems>> getOrdersByUserId(@PathVariable Long userId){
+    @GetMapping("/orders/user")
+    public ResponseEntity<List<OrderItems>> getOrdersByUser(){
+        Long userId = SecurityUtil.getCurrentUserId();
         List<OrderItems> orders = orderService.getOrdersByUserId(userId);
         return new ResponseEntity<>(orders,HttpStatus.OK);
     }

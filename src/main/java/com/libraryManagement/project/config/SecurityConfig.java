@@ -1,6 +1,4 @@
 package com.libraryManagement.project.config;
-
-// Import necessary classes
 import com.libraryManagement.project.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,7 +35,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/auth/**", "/swagger-ui/**", "/swagger-ui/index.html", "/swagger-ui.html","/v3/api-docs/**", "/api/v1/books/category/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -22,9 +22,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
 
-    // FIX: Use constructor injection for dependencies in filters.
-    // @Autowired on fields will NOT work here because filters are part of the servlet container's chain
-    // and are initialized before Spring's full dependency injection context is ready. This prevents NullPointerExceptions.
     public JwtAuthenticationFilter(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
     }
@@ -39,12 +36,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
             var authorities = List.of(new SimpleGrantedAuthority(role.name()));
-
-            // This custom principal will be available throughout the application for authenticated users.
             CustomUserPrinciple customUserPrincipal = new CustomUserPrinciple(userId, email);
 
             var authentication = new UsernamePasswordAuthenticationToken(
-                    customUserPrincipal, // Set our custom principal object
+                    customUserPrincipal,
                     null,
                     authorities
             );

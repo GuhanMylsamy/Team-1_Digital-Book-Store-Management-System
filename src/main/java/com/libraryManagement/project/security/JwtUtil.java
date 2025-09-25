@@ -25,8 +25,8 @@ public class JwtUtil {
         long EXPIRATION = 1000 * 60 * 60 * 10L; // 10 hours
         return Jwts.builder()
                 .setSubject(email)
-                .claim("role", role) // add role claim
-                .claim("userId", userId) // <-- Add userId here
+                .claim("role", role) //role claim
+                .claim("userId", userId)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
                 .signWith(key, SignatureAlgorithm.HS256)
