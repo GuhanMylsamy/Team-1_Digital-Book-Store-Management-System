@@ -5,6 +5,7 @@ import com.libraryManagement.project.dto.responseDTO.ReviewResponseDTO;
 import com.libraryManagement.project.entity.Book;
 import com.libraryManagement.project.entity.Review;
 import com.libraryManagement.project.entity.User;
+import com.libraryManagement.project.exception.BookNotFoundException;
 import com.libraryManagement.project.exception.ResourceNotFoundException;
 import com.libraryManagement.project.repository.BookRepository;
 import com.libraryManagement.project.repository.UserRepository;
@@ -39,7 +40,6 @@ public class ReviewController {
     //Get all the reviews
     @GetMapping("/{bookId}")
     public ResponseEntity<List<ReviewResponseDTO>> getAllReviewsByBookId (@PathVariable Long bookId) {
-
         List<ReviewResponseDTO> reviews = reviewService.getAllReviews(bookId);
         return ResponseEntity.ok(reviews);
     }
