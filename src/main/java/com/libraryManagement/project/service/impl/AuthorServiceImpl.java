@@ -1,5 +1,6 @@
 package com.libraryManagement.project.service.impl;
 import com.libraryManagement.project.entity.Author;
+import com.libraryManagement.project.exception.DuplicateResourceException;
 import com.libraryManagement.project.exception.ResourceNotFoundException;
 import com.libraryManagement.project.repository.AuthorRepository;
 import com.libraryManagement.project.repository.BookRepository;
@@ -48,7 +49,7 @@ public class AuthorServiceImpl implements AuthorService {
         boolean exists = authorRepository.existsByName(author.getName());
 
         if (exists) {
-            throw new IllegalArgumentException("Author already exists in the database.");
+            throw new DuplicateResourceException("Author already exists in the database.");
         }
 
         return authorRepository.save(author);
