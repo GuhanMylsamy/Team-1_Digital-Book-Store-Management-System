@@ -57,7 +57,7 @@ public class OrderControllerTest {
     @Test
     @WithMockUser
     void testPlaceOrder_Success() throws Exception {
-        OrderRequestDTO orderRequestDTO = new OrderRequestDTO(1L, 1L, 1L, Collections.emptyList());
+        OrderRequestDTO orderRequestDTO = new OrderRequestDTO(1L, 1L, Collections.emptyList());
         given(orderService.placeOrder(any(OrderRequestDTO.class))).willReturn(orderResponseDTO);
 
         mockMvc.perform(post("/api/v1/orders")
@@ -71,7 +71,7 @@ public class OrderControllerTest {
     @Test
     @WithMockUser
     void testBuyNow_Success() throws Exception {
-        BuyNowRequestDTO buyNowRequestDTO = new BuyNowRequestDTO(1L, 1L, 1L, 2);
+        BuyNowRequestDTO buyNowRequestDTO = new BuyNowRequestDTO(1L, 1L, 2);
         given(orderService.buyNow(any(BuyNowRequestDTO.class))).willReturn(orderResponseDTO);
 
         mockMvc.perform(post("/api/v1/orders/buy-now")

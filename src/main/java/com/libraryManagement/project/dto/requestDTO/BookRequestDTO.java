@@ -26,4 +26,9 @@ public class BookRequestDTO {
     private int stockQuantity;
     private String imageUrl;
 
+    public BookRequestDTO(String title, String author, String category) {
+        this.title = title;
+        this.authorName = author;
+        this.categoryName = category;
+    }
 }
