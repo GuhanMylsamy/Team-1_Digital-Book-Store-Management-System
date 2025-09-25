@@ -2,9 +2,13 @@ package com.libraryManagement.project.dto.requestDTO;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class BookRequestDTO {
     @NotNull(message= "Title cannot be null")
     private String title;
@@ -22,4 +26,9 @@ public class BookRequestDTO {
     private int stockQuantity;
     private String imageUrl;
 
+    public BookRequestDTO(String title, String author, String category) {
+        this.title = title;
+        this.authorName = author;
+        this.categoryName = category;
+    }
 }

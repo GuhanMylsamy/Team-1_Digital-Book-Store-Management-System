@@ -7,6 +7,7 @@ import com.libraryManagement.project.entity.Review;
 import com.libraryManagement.project.entity.User;
 import com.libraryManagement.project.exception.BookNotFoundException;
 import com.libraryManagement.project.exception.ResourceNotFoundException;
+import com.libraryManagement.project.exception.UserNotFoundException;
 import com.libraryManagement.project.repository.BookRepository;
 import com.libraryManagement.project.repository.UserRepository;
 import com.libraryManagement.project.service.impl.ReviewServiceImpl;
@@ -50,6 +51,7 @@ public class ReviewController {
                 .orElseThrow(() -> new ResourceNotFoundException("Book not found") );
         User user =  userRepository.findById(SecurityUtil.getCurrentUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
 
         Review newReview = new Review();
         newReview.setBook(book);
