@@ -18,7 +18,7 @@ public class JwtUtil {
 
     @PostConstruct
     public void init() {
-        String SECRET = "yourSecureSecretKeyWith32+CharactersForHS256";
+        final String SECRET = System.getenv("JWT_SECRET_KEY");
         this.key = Keys.hmacShaKeyFor(SECRET.getBytes());
     }
     public String generateToken(String email, String role, Long userId) {
