@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/orders")
 public class OrderController {
 
     private final OrderServiceImpl orderService;
@@ -24,27 +24,27 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @PostMapping("/orders")
+    @PostMapping("/placeOrder")
     public ResponseEntity<OrderResponseDTO> placeOrder(@RequestBody OrderRequestDTO orderRequestDTO){
         OrderResponseDTO orderResponseDTO = orderService.placeOrder(orderRequestDTO);
         return new ResponseEntity<>(orderResponseDTO, HttpStatus.CREATED);
     }
 
-    @PostMapping("/orders/buy-now")
+    @PostMapping("/buy-now")
     public ResponseEntity<OrderResponseDTO> buyNow(@RequestBody BuyNowRequestDTO buyNowRequestDTO){
         OrderResponseDTO orderResponseDTO = orderService.buyNow(buyNowRequestDTO);
         return new ResponseEntity<>(orderResponseDTO, HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/orders/getAllOrders")
+    @GetMapping("/getAllOrders")
     public ResponseEntity<List<Order>> getAllOrders(){
         List<Order> orders = orderService.getAllOrders();
         return new ResponseEntity<>(orders,HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    @GetMapping("/orders/user")
+    @GetMapping("/user")
     public ResponseEntity<List<OrderItems>> getOrdersByUser(){
         Long userId = SecurityUtil.getCurrentUserId();
         List<OrderItems> orders = orderService.getOrdersByUserId(userId);

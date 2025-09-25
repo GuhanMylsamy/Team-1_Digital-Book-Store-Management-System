@@ -2,6 +2,7 @@ package com.libraryManagement.project.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.libraryManagement.project.enums.Role;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,18 +21,23 @@ public class User {
     @Column(name = "user_id")
     private Long userId;
 
+    @NotNull
     @Column(name = "email",nullable = false, unique = true, length = 255)
     private String email;
 
+    @NotNull
     @Column(name = "full_name",nullable = false, length = 255)
     private String fullName;
+
 
     @Column(name = "new_password",length = 255)
     private String newPassword;
 
+
     @Column(name = "old_password",length = 255)
     private String oldPassword;
 
+    @NotNull
     @Column(name = "password",length = 255)
     private String password;
 
