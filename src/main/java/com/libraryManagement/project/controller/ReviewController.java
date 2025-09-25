@@ -41,7 +41,6 @@ public class ReviewController {
     //Get all the reviews
     @GetMapping("/{bookId}")
     public ResponseEntity<List<ReviewResponseDTO>> getAllReviewsByBookId (@PathVariable Long bookId) {
-
         List<ReviewResponseDTO> reviews = reviewService.getAllReviews(bookId);
         return ResponseEntity.ok(reviews);
     }
