@@ -5,7 +5,9 @@ import com.libraryManagement.project.dto.responseDTO.ReviewResponseDTO;
 import com.libraryManagement.project.entity.Book;
 import com.libraryManagement.project.entity.Review;
 import com.libraryManagement.project.entity.User;
+import com.libraryManagement.project.exception.BookNotFoundException;
 import com.libraryManagement.project.exception.ResourceNotFoundException;
+import com.libraryManagement.project.exception.UserNotFoundException;
 import com.libraryManagement.project.repository.BookRepository;
 import com.libraryManagement.project.repository.UserRepository;
 import com.libraryManagement.project.service.impl.ReviewServiceImpl;
@@ -45,9 +47,9 @@ public class ReviewController {
     @PostMapping("createReview/{bookId}")
     public ResponseEntity<ReviewResponseDTO> createReview(@PathVariable Long bookId , @RequestBody ReviewRequestDTO reviewRequestDTO) {
         Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new ResourceNotFoundException("Book not found") );
+                .orElseThrow(() -> new BookNotFoundException("Book not found") );
         User user =  userRepository.findById(reviewRequestDTO.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         Review newReview = new Review();
         newReview.setBook(book);

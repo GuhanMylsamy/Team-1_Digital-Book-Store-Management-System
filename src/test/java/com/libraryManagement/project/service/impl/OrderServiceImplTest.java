@@ -82,7 +82,7 @@ public class OrderServiceImplTest {
         // Arrange
         // Updated to match the AllArgsConstructor of OrderRequestDTO.
         // The 'items' list is passed as null since the current service logic uses cartId.
-        OrderRequestDTO requestDTO = new OrderRequestDTO(1L, 1L, 1L, null);
+        OrderRequestDTO requestDTO = new OrderRequestDTO(1L, 1L, null);
 
         given(userRepository.findById(1L)).willReturn(Optional.of(user));
         given(cartRepository.findById(1L)).willReturn(Optional.of(cart));
@@ -109,7 +109,7 @@ public class OrderServiceImplTest {
     @Test
     void testPlaceOrder_UserNotFound_ThrowsException() {
         // Arrange
-        OrderRequestDTO requestDTO = new OrderRequestDTO(1L, 1L, 1L, null);
+        OrderRequestDTO requestDTO = new OrderRequestDTO(1L, 1L, null);
         given(userRepository.findById(1L)).willReturn(Optional.empty());
 
         // Act & Assert
