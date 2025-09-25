@@ -4,6 +4,7 @@ import com.libraryManagement.project.dto.requestDTO.BookRequestDTO;
 import com.libraryManagement.project.dto.responseDTO.BookResponseDTO;
 import com.libraryManagement.project.entity.*;
 import com.libraryManagement.project.exception.BookNotFoundException;
+import com.libraryManagement.project.exception.BookSearchException;
 import com.libraryManagement.project.repository.*;
 import com.libraryManagement.project.service.BookService;
 import lombok.RequiredArgsConstructor;
@@ -71,24 +72,43 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookResponseDTO> findBooksByTitle(String title) {
-        return bookRepository.findByTitleContainingIgnoreCase(title).stream()
+        List<BookResponseDTO> books = bookRepository.findByTitleContainingIgnoreCase(title).stream()
                 .map(this::convertToResponseDTO)
                 .collect(Collectors.toList());
+
+        if (books.isEmpty()) {
+            throw new BookSearchException("No books found with title containing: " + title);
+        }
+
+        return books;
     }
 
     @Override
     public List<BookResponseDTO> findBooksByAuthor(String authorName) {
-        return bookRepository.findByAuthorNameContainingIgnoreCase(authorName).stream()
+        List<BookResponseDTO> books = bookRepository.findByAuthorNameContainingIgnoreCase(authorName).stream()
                 .map(this::convertToResponseDTO)
                 .collect(Collectors.toList());
+
+        if (books.isEmpty()) {
+            throw new BookSearchException("No books found by author: " + authorName);
+        }
+
+        return books;
     }
 
     @Override
     public List<BookResponseDTO> findBooksByCategory(String categoryName) {
-        return bookRepository.findByCategoryNameContainingIgnoreCase(categoryName).stream()
+        List<BookResponseDTO> books = bookRepository.findByCategoryNameContainingIgnoreCase(categoryName).stream()
                 .map(this::convertToResponseDTO)
                 .collect(Collectors.toList());
+
+        if (books.isEmpty()) {
+            throw new BookSearchException("No books found in category: " + categoryName);
+        }
+
+        return books;
     }
+
 
     @Override
     public BookResponseDTO addBook(BookRequestDTO bookRequestDTO) {
