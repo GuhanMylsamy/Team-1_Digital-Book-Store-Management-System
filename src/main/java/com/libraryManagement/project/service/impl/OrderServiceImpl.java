@@ -9,6 +9,7 @@ import com.libraryManagement.project.enums.OrderStatus;
 import com.libraryManagement.project.exception.ResourceNotFoundException;
 import com.libraryManagement.project.repository.*;
 import com.libraryManagement.project.service.OrderService;
+import com.libraryManagement.project.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +47,7 @@ public class OrderServiceImpl implements OrderService {
 
         //Fetch User, Cart, ShippingAddress Object from database using their IDs
 
-        User user = userRepository.findById(orderRequestDTO.getUserId())
+        User user = userRepository.findById(SecurityUtil.getCurrentUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User does not exist"));
 
         Cart cart = cartRepository.findById(orderRequestDTO.getCartId())
@@ -130,7 +131,7 @@ public class OrderServiceImpl implements OrderService {
 
         //Fetch User, Cart, ShippingAddress Object from database using their IDs
 
-        User user = userRepository.findById(buyNowRequestDTO.getUserId())
+        User user = userRepository.findById(SecurityUtil.getCurrentUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User does not exist"));
 
         ShippingAddress address = shippingAddressRepository.findById(buyNowRequestDTO.getAddressId())
@@ -165,7 +166,7 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(OrderStatus.PLACED);
         order.setPaymentId("1");
         order.setAddress(address);
-        order.setTotalAmount(price);
+        order.setTotalAmount(price * quantity);
 
         List<OrderItems> orderItems = new ArrayList<>();
 

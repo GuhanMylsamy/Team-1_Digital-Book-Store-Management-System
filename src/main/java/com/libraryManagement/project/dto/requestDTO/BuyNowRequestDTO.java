@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BuyNowRequestDTO {
 
-    private Long userId;
+    //private Long userId;
     private Long bookId;
     private Long addressId;
     private int quantity;
 
 
-    public BuyNowRequestDTO(long l, long l1, long l2, int i) {
+    public BuyNowRequestDTO( long l1, long l2, int i) {
     }
 }
