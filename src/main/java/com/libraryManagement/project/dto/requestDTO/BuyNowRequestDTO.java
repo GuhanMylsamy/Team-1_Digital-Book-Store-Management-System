@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BuyNowRequestDTO {
 
-    //private Long userId;
     private Long bookId;
     private Long addressId;
     private int quantity;

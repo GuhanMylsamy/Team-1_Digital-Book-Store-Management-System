@@ -3,6 +3,7 @@ package com.libraryManagement.project.controller;
 import com.libraryManagement.project.dto.requestDTO.UserAuthRequestDTO;
 import com.libraryManagement.project.dto.requestDTO.UserRequestDTO;
 import com.libraryManagement.project.dto.responseDTO.UserAuthResponseDTO;
+import com.libraryManagement.project.dto.responseDTO.UserProfileResponseDTO;
 import com.libraryManagement.project.entity.User;
 import com.libraryManagement.project.enums.Role;
 import com.libraryManagement.project.exception.ResourceNotFoundException;
@@ -75,8 +76,8 @@ public class UserAuthController {
     }
 
     @GetMapping("/profile")
-    public ResponseEntity<User> getUserProfile() {
-        User authenticatedUser = userService.getAuthenticatedUser();
+    public ResponseEntity<UserProfileResponseDTO> getUserProfile() {
+        UserProfileResponseDTO authenticatedUser = userService.getAuthenticatedUser();
         return ResponseEntity.ok(authenticatedUser);
     }
 }

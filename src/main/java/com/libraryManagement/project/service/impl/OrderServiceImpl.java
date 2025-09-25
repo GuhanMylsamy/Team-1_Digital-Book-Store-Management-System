@@ -6,6 +6,7 @@ import com.libraryManagement.project.dto.responseDTO.OrderItemResponseDTO;
 import com.libraryManagement.project.dto.responseDTO.OrderResponseDTO;
 import com.libraryManagement.project.entity.*;
 import com.libraryManagement.project.enums.OrderStatus;
+import com.libraryManagement.project.exception.InvalidInputException;
 import com.libraryManagement.project.exception.ResourceNotFoundException;
 import com.libraryManagement.project.repository.*;
 import com.libraryManagement.project.service.OrderService;
@@ -13,6 +14,7 @@ import com.libraryManagement.project.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.InvalidAlgorithmParameterException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -103,6 +105,10 @@ public class OrderServiceImpl implements OrderService {
             int stockQuantity = inventory.getStockQuantity();
             int updatedQuantity = stockQuantity - orderQuantity;
 
+            if(updatedQuantity <= 0){
+                throw new ResourceNotFoundException("No stock left for book with id" + book.getBookId());
+            }
+
             inventory.setStockQuantity(updatedQuantity);
 
             inventoryRepository.save(inventory);
@@ -143,6 +149,10 @@ public class OrderServiceImpl implements OrderService {
         int quantity = buyNowRequestDTO.getQuantity();
         double price = book.getPrice();
 
+        if(quantity <= 0){
+            throw new InvalidInputException("Quantity can't be less than 1");
+        }
+
         //Creating orderItem object
         OrderItems orderItem = new OrderItems();
         orderItem.setBook(book);
@@ -155,6 +165,10 @@ public class OrderServiceImpl implements OrderService {
 
         int stockQuantity = inventory.getStockQuantity();
         int updatedQuantity = stockQuantity - quantity;
+
+        if(updatedQuantity <= 0){
+            throw new ResourceNotFoundException("No stock left for this book");
+        }
 
         inventory.setStockQuantity(updatedQuantity);
 

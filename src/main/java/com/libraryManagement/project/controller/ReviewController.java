@@ -9,6 +9,8 @@ import com.libraryManagement.project.exception.ResourceNotFoundException;
 import com.libraryManagement.project.repository.BookRepository;
 import com.libraryManagement.project.repository.UserRepository;
 import com.libraryManagement.project.service.impl.ReviewServiceImpl;
+import com.libraryManagement.project.util.SecurityUtil;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,10 +45,10 @@ public class ReviewController {
     }
 
     @PostMapping("createReview/{bookId}")
-    public ResponseEntity<ReviewResponseDTO> createReview(@PathVariable Long bookId , @RequestBody ReviewRequestDTO reviewRequestDTO) {
+    public ResponseEntity<ReviewResponseDTO> createReview(@PathVariable Long bookId , @Valid @RequestBody ReviewRequestDTO reviewRequestDTO) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new ResourceNotFoundException("Book not found") );
-        User user =  userRepository.findById(reviewRequestDTO.getUserId())
+        User user =  userRepository.findById(SecurityUtil.getCurrentUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         Review newReview = new Review();

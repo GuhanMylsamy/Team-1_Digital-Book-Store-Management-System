@@ -2,6 +2,7 @@ package com.libraryManagement.project.service;
 
 import com.libraryManagement.project.dto.requestDTO.UserRequestDTO;
 import com.libraryManagement.project.dto.requestDTO.UserUpdateDTO;
+import com.libraryManagement.project.dto.responseDTO.UserProfileResponseDTO;
 import com.libraryManagement.project.entity.User;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -27,7 +28,7 @@ public interface UserService extends UserDetailsService {
         List<User> getAllCustomers();
 
         @Transactional
-        User getAuthenticatedUser();
+        UserProfileResponseDTO getAuthenticatedUser();
 
         @Transactional
         User updateUser(Long userId, User updatedUser);
