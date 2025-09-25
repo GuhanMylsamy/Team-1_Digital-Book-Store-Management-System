@@ -43,6 +43,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User registerUser(@Valid UserRequestDTO userRequestDTO) {
+        if(userRequestDTO.getEmail().isEmpty() || userRequestDTO.getFullName().isEmpty() || userRequestDTO.getPassword().isEmpty()) {
+            throw new UserAlreadyExistsException(STR." Provide Name or email or password.");
+        }
         if (userRepository.findByEmail(userRequestDTO.getEmail()).isPresent()) {
             throw new UserAlreadyExistsException(STR."User with email \{userRequestDTO.getEmail()} already exists.");
         }
