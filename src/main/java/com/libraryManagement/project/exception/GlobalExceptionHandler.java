@@ -75,6 +75,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(InvalidInputException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidInputException(InvalidInputException ex, HttpServletRequest request){
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.NOT_ACCEPTABLE,
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return new ResponseEntity<>(errorResponse,HttpStatus.NOT_ACCEPTABLE);
+    }
+
     // A single, general catch-all for any other unexpected errors (500 Internal Server Error).
 //    @ExceptionHandler(Exception.class)
 //    public ResponseEntity<ErrorResponse> handleGeneralException(Exception ex, HttpServletRequest request) {

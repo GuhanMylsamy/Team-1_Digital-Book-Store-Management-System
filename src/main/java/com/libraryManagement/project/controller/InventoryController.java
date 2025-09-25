@@ -30,9 +30,9 @@ public class InventoryController {
         return ResponseEntity.ok(inventoryService.getInventoryById(id));
     }
 
-    @PutMapping("/update-stock/{bookId}")
-    public ResponseEntity<Map<String,String>> updateStockQuantity(@PathVariable Long bookId, @RequestBody InventoryRequestDTO requestDTO) {
-        inventoryService.updateStockQuantity(bookId, requestDTO);
+    @PutMapping("/update-stock")
+    public ResponseEntity<Map<String,String>> updateStockQuantity(@RequestBody InventoryRequestDTO requestDTO) {
+        inventoryService.updateStockQuantity(requestDTO.getBookId(), requestDTO);
         return ResponseEntity.ok(Map.of("message", "Inventory stocks updated successfully!"));
     }
     @GetMapping("/low-stock-alerts")

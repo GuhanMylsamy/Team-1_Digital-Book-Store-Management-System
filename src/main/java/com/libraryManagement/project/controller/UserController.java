@@ -63,13 +63,8 @@ public class UserController {
     @GetMapping("/profile")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public ResponseEntity<UserProfileResponseDTO> getUserProfile() {
-        User user = userService.getAuthenticatedUser();
-        UserProfileResponseDTO profile = new UserProfileResponseDTO(
-                user.getUserId(),
-                user.getFullName(),
-                user.getEmail()
-        );
-        return ResponseEntity.ok(profile);
+        UserProfileResponseDTO user = userService.getAuthenticatedUser();
+        return ResponseEntity.ok(user);
     }
 
     /**

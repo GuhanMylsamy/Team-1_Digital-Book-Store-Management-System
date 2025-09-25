@@ -2,6 +2,7 @@ package com.libraryManagement.project.service.impl;
 
 import com.libraryManagement.project.dto.requestDTO.UserRequestDTO;
 import com.libraryManagement.project.dto.requestDTO.UserUpdateDTO;
+import com.libraryManagement.project.dto.responseDTO.UserProfileResponseDTO;
 import com.libraryManagement.project.entity.User;
 import com.libraryManagement.project.enums.Role;
 import com.libraryManagement.project.exception.ResourceNotFoundException;
@@ -65,17 +66,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllCustomers() {
-        return userRepository.findByRole(Role.ADMIN);
+        return userRepository.findByRole(Role.USER);
     }
 
     @Override
-    public User getAuthenticatedUser() {
+    public UserProfileResponseDTO getAuthenticatedUser() {
         String email = SecurityUtil.getCurrentUserEmail();
         if (email == null) {
             throw new IllegalStateException("User not authenticated or email not found in principal.");
         }
-        return userRepository.findByEmail(email)
+        User userInfo = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Authenticated user not found in the database."));
+
+        return UserProfileResponseDTO.builder()
+                .userId(userInfo.getUserId())
+                .orders(userInfo.getOrders())
+                .addresses(userInfo.getAddresses())
+                .role(userInfo.getRole())
+                .fullName(userInfo.getFullName())
+                .email(userInfo.getEmail())
+                .build();
     }
 
 

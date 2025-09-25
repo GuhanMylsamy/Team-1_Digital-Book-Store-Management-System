@@ -3,8 +3,8 @@
 -- 1. Independent Tables: users, authors, categories
 -- 👤 USERS
 INSERT INTO users (user_id, email, full_name, password, role) VALUES
-(1, 'alice@example.com', 'Alice Sharma', 'pass123', 'USER'),
-(2, 'rahul@example.com', 'Rahul Verma', 'pass456', 'USER'),
+(1, 'alice@example.com', 'Alice Sharma', 'pass123@', 'USER'),
+(2, 'rahul@example.com', 'Rahul Verma', 'pass456@', 'USER'),
 (3, 'user@example.com', 'User', 'pass', 'USER'),
 (4, 'priya.patel@example.com', 'Priya Patel', 'priya@24', 'USER'),
 (5, 'vikram.singh@example.com', 'Vikram Singh', 'vikram#s', 'USER'),

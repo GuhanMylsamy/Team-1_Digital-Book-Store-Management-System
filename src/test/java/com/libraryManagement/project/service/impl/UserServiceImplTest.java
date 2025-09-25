@@ -2,6 +2,7 @@ package com.libraryManagement.project.service.impl;
 
 import com.libraryManagement.project.dto.requestDTO.UserRequestDTO;
 import com.libraryManagement.project.dto.requestDTO.UserUpdateDTO;
+import com.libraryManagement.project.dto.responseDTO.UserProfileResponseDTO;
 import com.libraryManagement.project.entity.User;
 import com.libraryManagement.project.enums.Role;
 import com.libraryManagement.project.exception.ResourceNotFoundException;
@@ -152,7 +153,7 @@ class UserServiceImplTest {
             mockedSecurityUtil.when(SecurityUtil::getCurrentUserEmail).thenReturn("test@example.com");
             when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.of(user));
 
-            User authenticatedUser = userService.getAuthenticatedUser();
+            UserProfileResponseDTO authenticatedUser = userService.getAuthenticatedUser();
 
             assertNotNull(authenticatedUser);
             assertEquals("test@example.com", authenticatedUser.getEmail());
