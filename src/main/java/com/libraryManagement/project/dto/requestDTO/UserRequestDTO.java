@@ -18,5 +18,6 @@ public class UserRequestDTO {
     private String fullName;
     @NotNull
     private String password;
+
     //private Role role;
 }
