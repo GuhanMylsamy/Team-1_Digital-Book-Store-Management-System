@@ -6,15 +6,19 @@ import com.libraryManagement.project.dto.responseDTO.OrderItemResponseDTO;
 import com.libraryManagement.project.dto.responseDTO.OrderResponseDTO;
 import com.libraryManagement.project.entity.*;
 import com.libraryManagement.project.enums.OrderStatus;
+import com.libraryManagement.project.exception.InvalidInputException;
 import com.libraryManagement.project.exception.ResourceNotFoundException;
 import com.libraryManagement.project.repository.*;
 import com.libraryManagement.project.service.OrderService;
+import com.libraryManagement.project.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.InvalidAlgorithmParameterException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
 
         //Fetch User, Cart, ShippingAddress Object from database using their IDs
 
-        User user = userRepository.findById(orderRequestDTO.getUserId())
+        User user = userRepository.findById(SecurityUtil.getCurrentUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User does not exist"));
 
         Cart cart = cartRepository.findById(orderRequestDTO.getCartId())
@@ -66,7 +70,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = new Order();
         order.setUser(user);
         order.setStatus(OrderStatus.PLACED);
-        order.setPaymentId("1");
+        order.setPaymentId(STR."id_pay\{UUID.randomUUID()}");
         order.setAddress(address);
 
 
@@ -102,6 +106,10 @@ public class OrderServiceImpl implements OrderService {
             int stockQuantity = inventory.getStockQuantity();
             int updatedQuantity = stockQuantity - orderQuantity;
 
+            if(updatedQuantity < 0){
+                throw new ResourceNotFoundException("No stock left for book with id" + book.getBookId());
+            }
+
             inventory.setStockQuantity(updatedQuantity);
 
             inventoryRepository.save(inventory);
@@ -130,7 +138,7 @@ public class OrderServiceImpl implements OrderService {
 
         //Fetch User, Cart, ShippingAddress Object from database using their IDs
 
-        User user = userRepository.findById(buyNowRequestDTO.getUserId())
+        User user = userRepository.findById(SecurityUtil.getCurrentUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User does not exist"));
 
         ShippingAddress address = shippingAddressRepository.findById(buyNowRequestDTO.getAddressId())
@@ -141,6 +149,10 @@ public class OrderServiceImpl implements OrderService {
 
         int quantity = buyNowRequestDTO.getQuantity();
         double price = book.getPrice();
+
+        if(quantity <= 0){
+            throw new InvalidInputException("Quantity can't be less than 1");
+        }
 
         //Creating orderItem object
         OrderItems orderItem = new OrderItems();
@@ -155,6 +167,10 @@ public class OrderServiceImpl implements OrderService {
         int stockQuantity = inventory.getStockQuantity();
         int updatedQuantity = stockQuantity - quantity;
 
+        if(updatedQuantity < 0){
+            throw new ResourceNotFoundException("No stock left for this book");
+        }
+
         inventory.setStockQuantity(updatedQuantity);
 
         inventoryRepository.save(inventory);
@@ -163,9 +179,9 @@ public class OrderServiceImpl implements OrderService {
         Order order = new Order();
         order.setUser(user);
         order.setStatus(OrderStatus.PLACED);
-        order.setPaymentId("1");
+        order.setPaymentId(STR."id_pay\{UUID.randomUUID()}");
         order.setAddress(address);
-        order.setTotalAmount(price);
+        order.setTotalAmount(price * quantity);
 
         List<OrderItems> orderItems = new ArrayList<>();
 

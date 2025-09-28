@@ -5,12 +5,14 @@ import com.libraryManagement.project.dto.responseDTO.InventoryResponseDTO;
 import com.libraryManagement.project.service.impl.InventoryServiceImpl;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/inventory")
+@RequestMapping("/api/v1/inventory")
+@PreAuthorize("hasAuthority('ADMIN')")
 public class InventoryController {
     private final InventoryServiceImpl inventoryService;
 
@@ -28,9 +30,9 @@ public class InventoryController {
         return ResponseEntity.ok(inventoryService.getInventoryById(id));
     }
 
-    @PutMapping("/update-stock/{bookId}")
-    public ResponseEntity<Map<String,String>> updateStockQuantity(@PathVariable Long bookId, @RequestBody InventoryRequestDTO requestDTO) {
-        inventoryService.updateStockQuantity(bookId, requestDTO);
+    @PutMapping("/update-stock")
+    public ResponseEntity<Map<String,String>> updateStockQuantity(@RequestBody InventoryRequestDTO requestDTO) {
+        inventoryService.updateStockQuantity(requestDTO.getBookId(), requestDTO);
         return ResponseEntity.ok(Map.of("message", "Inventory stocks updated successfully!"));
     }
     @GetMapping("/low-stock-alerts")

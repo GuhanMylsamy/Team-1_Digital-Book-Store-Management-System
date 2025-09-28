@@ -1,9 +1,14 @@
 package com.libraryManagement.project.entity;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.libraryManagement.project.enums.Role;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.ToString;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -16,18 +21,23 @@ public class User {
     @Column(name = "user_id")
     private Long userId;
 
+    @NotNull
     @Column(name = "email",nullable = false, unique = true, length = 255)
     private String email;
 
+    @NotNull
     @Column(name = "full_name",nullable = false, length = 255)
     private String fullName;
+
 
     @Column(name = "new_password",length = 255)
     private String newPassword;
 
+
     @Column(name = "old_password",length = 255)
     private String oldPassword;
 
+    @NotNull
     @Column(name = "password",length = 255)
     private String password;
 
@@ -36,11 +46,16 @@ public class User {
     private Role role;
 
     // Relationships
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("user-orders")
     private List<Order> orders;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("user-addresses")
     private List<ShippingAddress> addresses;
 
-
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(STR."ROLE_\{this.role.name()}"));
+    }
 }

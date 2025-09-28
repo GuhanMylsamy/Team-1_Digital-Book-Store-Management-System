@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -37,22 +38,26 @@ public class BookController {
         return ResponseEntity.ok(bookService.getBookById(id));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/author/{authorId}")
     public ResponseEntity<List<BookResponseDTO>> getBooksByAuthor(@PathVariable Long authorId) {
         return ResponseEntity.ok(bookService.getBooksByAuthor(authorId));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<List<BookResponseDTO>> getBooksByCategory(@PathVariable Long categoryId) {
         return ResponseEntity.ok(bookService.getBooksByCategory(categoryId));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/addBook")
-    public ResponseEntity<BookResponseDTO> addBook(@RequestBody BookRequestDTO bookRequestDTO){
+    public ResponseEntity<BookResponseDTO> addBook(@Valid @RequestBody BookRequestDTO bookRequestDTO){
         BookResponseDTO createdBook = bookService.addBook(bookRequestDTO);
         return new ResponseEntity<>(createdBook, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/update/{id}")
     public ResponseEntity<BookResponseDTO> updateBook(@PathVariable Long id,@Valid @RequestBody BookRequestDTO bookRequestDTO) {
         BookResponseDTO updatedBook = bookService.updateBook(id, bookRequestDTO);
@@ -74,6 +79,7 @@ public class BookController {
         return ResponseEntity.ok(bookService.findBooksByCategory(categoryName));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Map<String, String>> deleteBook(@PathVariable Long id){
         bookService.deleteBook(id);

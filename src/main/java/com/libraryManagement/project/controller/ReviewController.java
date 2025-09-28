@@ -5,10 +5,14 @@ import com.libraryManagement.project.dto.responseDTO.ReviewResponseDTO;
 import com.libraryManagement.project.entity.Book;
 import com.libraryManagement.project.entity.Review;
 import com.libraryManagement.project.entity.User;
+import com.libraryManagement.project.exception.BookNotFoundException;
 import com.libraryManagement.project.exception.ResourceNotFoundException;
+import com.libraryManagement.project.exception.UserNotFoundException;
 import com.libraryManagement.project.repository.BookRepository;
 import com.libraryManagement.project.repository.UserRepository;
 import com.libraryManagement.project.service.impl.ReviewServiceImpl;
+import com.libraryManagement.project.util.SecurityUtil;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-
+@RestController
 @RequestMapping("api/v1/review")
 public class ReviewController {
 
@@ -28,7 +32,6 @@ public class ReviewController {
 
     private final UserRepository userRepository;
 
-    @Autowired
     public ReviewController(ReviewServiceImpl reviewService, BookRepository bookRepository, UserRepository userRepository) {
         this.reviewService = reviewService;
         this.bookRepository = bookRepository;
@@ -38,17 +41,17 @@ public class ReviewController {
     //Get all the reviews
     @GetMapping("/{bookId}")
     public ResponseEntity<List<ReviewResponseDTO>> getAllReviewsByBookId (@PathVariable Long bookId) {
-
         List<ReviewResponseDTO> reviews = reviewService.getAllReviews(bookId);
         return ResponseEntity.ok(reviews);
     }
 
     @PostMapping("createReview/{bookId}")
-    public ResponseEntity<ReviewResponseDTO> createReview(@PathVariable Long bookId , @RequestBody ReviewRequestDTO reviewRequestDTO) {
+    public ResponseEntity<ReviewResponseDTO> createReview(@PathVariable Long bookId , @Valid @RequestBody ReviewRequestDTO reviewRequestDTO) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new ResourceNotFoundException("Book not found") );
-        User user =  userRepository.findById(reviewRequestDTO.getUserId())
+        User user =  userRepository.findById(SecurityUtil.getCurrentUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
 
         Review newReview = new Review();
         newReview.setBook(book);
@@ -80,7 +83,7 @@ public class ReviewController {
     }
 
     @DeleteMapping("/deleteByAdmin/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> deleteReviewByAdmin(@PathVariable Long id) {
         reviewService.deleteReviewByAdmin(id);
         return ResponseEntity.ok("Review deleted successfully.");

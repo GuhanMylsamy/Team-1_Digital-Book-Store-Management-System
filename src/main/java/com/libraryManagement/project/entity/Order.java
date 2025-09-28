@@ -32,7 +32,7 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "user_id",nullable = false)
-    @JsonBackReference
+    @JsonBackReference("user-orders")
     private User user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL,orphanRemoval = true)
@@ -46,5 +46,6 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="shipping_address")
+    @JsonBackReference
     private ShippingAddress address;
 }
