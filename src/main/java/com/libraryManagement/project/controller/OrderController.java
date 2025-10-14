@@ -5,6 +5,7 @@ import com.libraryManagement.project.dto.requestDTO.OrderRequestDTO;
 import com.libraryManagement.project.dto.responseDTO.OrderResponseDTO;
 import com.libraryManagement.project.entity.Order;
 import com.libraryManagement.project.entity.OrderItems;
+import com.libraryManagement.project.service.OrderService;
 import com.libraryManagement.project.service.impl.OrderServiceImpl;
 import com.libraryManagement.project.util.SecurityUtil;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,7 @@ import java.util.List;
 @RequestMapping("/api/v1/orders")
 public class OrderController {
 
-    private final OrderServiceImpl orderService;
+    private final OrderService orderService;
 
     public OrderController(OrderServiceImpl orderService){
         this.orderService = orderService;

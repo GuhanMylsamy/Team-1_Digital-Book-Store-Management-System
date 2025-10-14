@@ -17,7 +17,7 @@ public class PaymentController {
 
     private PaymentServiceImpl paymentService;
 
-    @PostMapping("/validatePayment")
+    @PostMapping("/validate")
     public ResponseEntity<PaymentResponseDTO> validatePayment(@RequestBody PaymentRequestDTO paymentRequestDTO, @RequestHeader Long userId){
         PaymentResponseDTO paymentResponseDTO = paymentService.validatePayment(userId,paymentRequestDTO);
         System.out.println(paymentRequestDTO);
