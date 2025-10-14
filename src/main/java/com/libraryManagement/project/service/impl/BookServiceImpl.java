@@ -10,9 +10,16 @@ import com.libraryManagement.project.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -211,6 +218,55 @@ public class BookServiceImpl implements BookService {
         }
     }
 
+    @Override
+    public BookResponseDTO addBookWithImage(BookRequestDTO bookDTO, MultipartFile imageFile) {
+        try {
+            // 1. Generate a unique filename
+            String fileName = UUID.randomUUID() + "_" + imageFile.getOriginalFilename();
+
+            // 2. Define the static image directory path
+            Path uploadDir = Paths.get("uploaded-images");
+            Files.createDirectories(uploadDir);
+            Path filePath = uploadDir.resolve(fileName);
+            Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            // 4. Assign image URL in DTO
+            bookDTO.setImageUrl("/images/" + fileName);
+
+            // 5. Reuse normal addBook() logic
+            return addBook(bookDTO);
+
+        } catch (IOException e) {
+            throw new RuntimeException("Error saving image file", e);
+        }
+    }
+
+    @Override
+    public BookResponseDTO updateBookWithImage(Long bookId, BookRequestDTO bookDTO, MultipartFile imageFile) {
+        try {
+            // 1. Generate a unique filename
+            String fileName = UUID.randomUUID() + "_" + imageFile.getOriginalFilename();
+
+            // 2. Define and create the image directory
+            Path uploadDir = Paths.get("uploaded-images");
+            Files.createDirectories(uploadDir);
+            Path filePath = uploadDir.resolve(fileName);
+
+            // 3. Save the file
+            Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            // 4. Update image URL in DTO
+            bookDTO.setImageUrl("/images/" + fileName);
+
+            // 5. Reuse existing update logic
+            return updateBook(bookId, bookDTO);
+
+        } catch (IOException e) {
+            throw new RuntimeException("Error updating image file", e);
+        }
+    }
+
+    @Override
     // Dummy conversion methods (replace with ModelMapper or actual logic)
     public BookResponseDTO convertToResponseDTO(Book book) {
         BookResponseDTO dto = new BookResponseDTO();
@@ -224,6 +280,7 @@ public class BookServiceImpl implements BookService {
         return dto;
     }
 
+    @Override
     public Book convertToEntity(BookRequestDTO dto) {
         Book book = new Book();
         book.setTitle(dto.getTitle());
