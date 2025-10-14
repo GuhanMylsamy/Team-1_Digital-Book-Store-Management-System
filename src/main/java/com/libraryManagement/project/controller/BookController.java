@@ -101,7 +101,7 @@ public class BookController {
         return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(value = "/updateBookWithImage/{id}", consumes = "multipart/form-data")
     public ResponseEntity<BookResponseDTO> updateBookWithImage(
             @PathVariable Long id,
