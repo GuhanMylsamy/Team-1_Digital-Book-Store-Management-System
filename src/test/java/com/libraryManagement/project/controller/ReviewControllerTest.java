@@ -64,7 +64,6 @@ class ReviewControllerTest {
         user.setUserId(1L);
 
         reviewRequestDTO = new ReviewRequestDTO();
-        reviewRequestDTO.setUserId(1L);
         reviewRequestDTO.setComment("Great book!");
         reviewRequestDTO.setRating(5.0);
 
