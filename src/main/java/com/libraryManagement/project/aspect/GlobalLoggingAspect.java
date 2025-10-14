@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 
 @Aspect
 @Component
-@EnableAspectJAutoProxy // proxyTargetClass = false is the default and can be removed
+@EnableAspectJAutoProxy
 public class GlobalLoggingAspect {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GlobalLoggingAspect.class);

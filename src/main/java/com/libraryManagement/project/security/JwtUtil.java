@@ -2,6 +2,7 @@ package com.libraryManagement.project.security;
 
 import com.libraryManagement.project.enums.Role;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -16,10 +17,8 @@ public class JwtUtil {
 
     private SecretKey key;
 
-    @PostConstruct
-    public void init() {
-        String SECRET = "yourSecureSecretKeyWith32+CharactersForHS256";
-        this.key = Keys.hmacShaKeyFor(SECRET.getBytes());
+    public JwtUtil(@Value ("${jwt.secret}") String secretKey) {
+        this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
     }
     public String generateToken(String email, String role, Long userId) {
         long EXPIRATION = 1000 * 60 * 60 * 10L; // 10 hours

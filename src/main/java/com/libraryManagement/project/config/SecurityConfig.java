@@ -93,7 +93,6 @@ public class SecurityConfig {
         return authProvider;
     }
 
-    // UPDATE: This is the modern, recommended way to expose the AuthenticationManager bean.
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
