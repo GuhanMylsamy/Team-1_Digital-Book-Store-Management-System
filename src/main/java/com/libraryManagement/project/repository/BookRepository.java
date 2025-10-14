@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findByAuthorAuthorId(Long authorId);
 
-    Optional<Book> findByTitle(String name);
+//    Optional<Book> findByTitle(String name);
     boolean existsByAuthor_AuthorId(Long authorId);
     boolean existsByCategory_CategoryId(Long categoryId);
     List<Book> findByCategoryCategoryId(Long categoryId);

@@ -46,7 +46,8 @@ public class SecurityConfig {
                                 "/api/v1/auth/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
-                                "/swagger-ui.html"
+                                "/swagger-ui.html",
+                                "/api/v1/books/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
@@ -54,7 +55,7 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider()) // Set the authentication provider
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 
-                // UPDATE: Added custom exception handling for 401 and 403 errors.
+                // custom exception handling for 401 and 403 errors.
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint((request, response, authException) -> {
                             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -93,7 +94,6 @@ public class SecurityConfig {
         return authProvider;
     }
 
-    // UPDATE: This is the modern, recommended way to expose the AuthenticationManager bean.
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
