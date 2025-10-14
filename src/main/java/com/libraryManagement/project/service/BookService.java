@@ -37,6 +37,10 @@ public interface BookService {
         return new Book(bookRequestDTO.getTitle(), null, null, bookRequestDTO.getPrice(),bookRequestDTO.getStockQuantity(),bookRequestDTO.getImageUrl());
     }
 
+    BookResponseDTO addBookWithImage(BookRequestDTO bookDTO, MultipartFile imageFile);
+
+    BookResponseDTO updateBookWithImage(Long bookId,BookRequestDTO bookDTO, MultipartFile imageFile);
+
     default BookResponseDTO convertToResponseDTO(Book book) {
         return new BookResponseDTO(book.getBookId(), book.getTitle(), book.getAuthor().getName(), book.getCategory().getName(), book.getPrice(), book.getStockQuantity(),book.getImageUrl());
     }

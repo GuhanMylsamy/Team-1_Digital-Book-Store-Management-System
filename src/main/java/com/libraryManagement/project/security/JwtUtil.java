@@ -22,7 +22,7 @@ public class JwtUtil {
         this.key = Keys.hmacShaKeyFor(SECRET.getBytes());
     }
     public String generateToken(String email, String role, Long userId) {
-        long EXPIRATION = 1000 * 60 * 60 * 10L; // 10 hours
+        long EXPIRATION = 1000 * 60 * 15L;
         return Jwts.builder()
                 .setSubject(email)
                 .claim("role", role) //role claim

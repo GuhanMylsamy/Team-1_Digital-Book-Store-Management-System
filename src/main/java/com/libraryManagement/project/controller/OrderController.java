@@ -7,6 +7,7 @@ import com.libraryManagement.project.entity.Order;
 import com.libraryManagement.project.entity.OrderItems;
 import com.libraryManagement.project.service.impl.OrderServiceImpl;
 import com.libraryManagement.project.util.SecurityUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,11 +21,12 @@ public class OrderController {
 
     private final OrderServiceImpl orderService;
 
+    @Autowired
     public OrderController(OrderServiceImpl orderService){
         this.orderService = orderService;
     }
 
-    @PostMapping("/placeOrder")
+    @PostMapping("/addToCart")
     public ResponseEntity<OrderResponseDTO> placeOrder(@RequestBody OrderRequestDTO orderRequestDTO){
         OrderResponseDTO orderResponseDTO = orderService.placeOrder(orderRequestDTO);
         return new ResponseEntity<>(orderResponseDTO, HttpStatus.CREATED);

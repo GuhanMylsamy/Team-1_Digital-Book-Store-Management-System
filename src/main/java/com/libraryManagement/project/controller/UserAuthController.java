@@ -41,19 +41,11 @@ public class UserAuthController {
         return "Welcome, this endpoint is not secure!";
     }
 
-    /**
-     * Handles new user registration.
-     * Validation is now handled by @Valid.
-     */
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody @Valid UserRequestDTO userRequestDTO) {
         userService.registerUser(userRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body("Account created successfully.");
     }
-
-    /**
-     * Authenticates a user and returns a JWT.
-     */
 
     @PostMapping("/login")
     public ResponseEntity<UserAuthResponseDTO> authenticateAndGetToken(@RequestBody @Valid UserAuthRequestDTO authRequestDTO) {
