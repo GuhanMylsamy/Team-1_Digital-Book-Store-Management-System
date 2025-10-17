@@ -15,6 +15,11 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1/users")
+@CrossOrigin(origins = "http://localhost:4200",
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
+                RequestMethod.DELETE, RequestMethod.OPTIONS},
+        allowedHeaders = "*",
+        allowCredentials = "true")
 public class UserController {
 
     private final UserService userService;

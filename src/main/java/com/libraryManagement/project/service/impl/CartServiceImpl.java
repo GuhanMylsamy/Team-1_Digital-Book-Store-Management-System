@@ -37,10 +37,26 @@ public class CartServiceImpl implements CartService{
         this.bookRepository = bookRepository;
     }
 
+//    @Override
+//    public CartResponseDTO getCart(Long userId) {
+//        Cart cart = cartRepository.findByUserUserId(userId).orElseThrow(() -> new ResourceNotFoundException("Cart not found or cart is empty!"));
+//        return convertToCartResponseDTO(cart);
+//    }
+
     @Override
     public CartResponseDTO getCart(Long userId) {
-        Cart cart = cartRepository.findByUserUserId(userId).orElseThrow(() -> new ResourceNotFoundException("Cart not found or cart is empty!"));
-        return convertToCartResponseDTO(cart);
+        Optional<Cart> optionalCart = cartRepository.findByUserUserId(userId);
+        if (optionalCart.isPresent()) {
+            Cart cart = optionalCart.get();
+            return convertToCartResponseDTO(cart);
+        } else {
+            CartResponseDTO emptyCart = new CartResponseDTO();
+            emptyCart.setCartId(null);
+            emptyCart.setUserId(userId);
+            emptyCart.setCartItems(new ArrayList<>());
+            emptyCart.setTotalAmount(0.0);
+            return emptyCart;
+        }
     }
 
     @Transactional

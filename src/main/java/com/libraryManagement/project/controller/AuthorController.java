@@ -12,6 +12,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/authors")
+@CrossOrigin(origins = "http://localhost:4200",
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
+                RequestMethod.DELETE, RequestMethod.OPTIONS},
+        allowedHeaders = "*",
+        allowCredentials = "true")
 public class AuthorController {
 
     private final AuthorServiceImpl authorService;

@@ -24,6 +24,11 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/review")
+@CrossOrigin(origins = "http://localhost:4200",
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
+                RequestMethod.DELETE, RequestMethod.OPTIONS},
+        allowedHeaders = "*",
+        allowCredentials = "true")
 public class ReviewController {
 
     private final ReviewServiceImpl reviewService;
