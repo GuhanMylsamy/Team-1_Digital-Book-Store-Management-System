@@ -6,6 +6,7 @@ import com.libraryManagement.project.dto.responseDTO.OrderItemResponseDTO;
 import com.libraryManagement.project.dto.responseDTO.OrderResponseDTO;
 import com.libraryManagement.project.entity.*;
 import com.libraryManagement.project.enums.OrderStatus;
+import com.libraryManagement.project.exception.InvalidInputException;
 import com.libraryManagement.project.exception.ResourceNotFoundException;
 import com.libraryManagement.project.repository.*;
 import com.libraryManagement.project.service.OrderService;
@@ -13,9 +14,11 @@ import com.libraryManagement.project.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.InvalidAlgorithmParameterException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -67,7 +70,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = new Order();
         order.setUser(user);
         order.setStatus(OrderStatus.PLACED);
-        order.setPaymentId("1");
+        order.setPaymentId(STR."id_pay\{UUID.randomUUID()}");
         order.setAddress(address);
 
 
@@ -103,6 +106,10 @@ public class OrderServiceImpl implements OrderService {
             int stockQuantity = inventory.getStockQuantity();
             int updatedQuantity = stockQuantity - orderQuantity;
 
+            if(updatedQuantity < 0){
+                throw new ResourceNotFoundException("No stock left for book with id" + book.getBookId());
+            }
+
             inventory.setStockQuantity(updatedQuantity);
 
             inventoryRepository.save(inventory);
@@ -137,11 +144,15 @@ public class OrderServiceImpl implements OrderService {
         ShippingAddress address = shippingAddressRepository.findById(buyNowRequestDTO.getAddressId())
                 .orElseThrow(() -> new ResourceNotFoundException("Address does not exist"));
 
-        Book book = bookRepository.findById(buyNowRequestDTO.getAddressId())
+        Book book = bookRepository.findById(buyNowRequestDTO.getBookId())
                 .orElseThrow(() -> new ResourceNotFoundException("Book does not exist"));
 
         int quantity = buyNowRequestDTO.getQuantity();
         double price = book.getPrice();
+
+        if(quantity <= 0){
+            throw new InvalidInputException("Quantity can't be less than 1");
+        }
 
         //Creating orderItem object
         OrderItems orderItem = new OrderItems();
@@ -156,6 +167,10 @@ public class OrderServiceImpl implements OrderService {
         int stockQuantity = inventory.getStockQuantity();
         int updatedQuantity = stockQuantity - quantity;
 
+        if(updatedQuantity < 0){
+            throw new ResourceNotFoundException("No stock left for this book");
+        }
+
         inventory.setStockQuantity(updatedQuantity);
 
         inventoryRepository.save(inventory);
@@ -164,7 +179,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = new Order();
         order.setUser(user);
         order.setStatus(OrderStatus.PLACED);
-        order.setPaymentId("1");
+        order.setPaymentId(STR."id_pay\{UUID.randomUUID()}");
         order.setAddress(address);
         order.setTotalAmount(price * quantity);
 
@@ -217,7 +232,28 @@ public class OrderServiceImpl implements OrderService {
         return ordersRepository.findAll();
     }
 
-    public List<OrderItems> getOrdersByUserId(Long userId) {
-        return orderItemsRepository.findAllByUserId(userId);
+    @Override
+    public List<OrderItemResponseDTO> getOrdersByUserId(Long userId) {
+        // 1. Fetch all OrderItems entities for the user.
+        List<OrderItems> orderItems = orderItemsRepository.findAllByUserId(userId);
+
+        // 2. Map each OrderItems entity to the corresponding DTO.
+        return orderItems.stream()
+                .map(this::mapToOrderItemResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * ✨ FIX: This is the correct helper method.
+     * It takes an 'OrderItems' object and returns the 'OrderItemResponseDTO'.
+     */
+    private OrderItemResponseDTO mapToOrderItemResponseDTO(OrderItems item) {
+        return new OrderItemResponseDTO(
+                item.getOrder().getOrderId(),     // The ID of the order item line
+                item.getBook().getBookId(), // The ID of the book
+                item.getBook().getTitle(),  // The name of the book
+                item.getQuantity(),
+                item.getUnitPrice()
+        );
     }
 }

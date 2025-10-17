@@ -2,6 +2,7 @@ package com.libraryManagement.project.service;
 
 import com.libraryManagement.project.dto.requestDTO.BuyNowRequestDTO;
 import com.libraryManagement.project.dto.requestDTO.OrderRequestDTO;
+import com.libraryManagement.project.dto.responseDTO.OrderItemResponseDTO;
 import com.libraryManagement.project.dto.responseDTO.OrderResponseDTO;
 import com.libraryManagement.project.entity.Order;
 import com.libraryManagement.project.entity.OrderItems;
@@ -20,5 +21,5 @@ public interface OrderService {
 
     List<Order> getAllOrders();
 
-    List<OrderItems> getOrdersByUserId(Long userId);
+    List<OrderItemResponseDTO> getOrdersByUserId(Long userId);
 }

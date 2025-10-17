@@ -3,6 +3,7 @@ package com.libraryManagement.project.controller;
 import com.libraryManagement.project.dto.requestDTO.UserAuthRequestDTO;
 import com.libraryManagement.project.dto.requestDTO.UserRequestDTO;
 import com.libraryManagement.project.dto.responseDTO.UserAuthResponseDTO;
+import com.libraryManagement.project.dto.responseDTO.UserProfileResponseDTO;
 import com.libraryManagement.project.entity.User;
 import com.libraryManagement.project.enums.Role;
 import com.libraryManagement.project.exception.ResourceNotFoundException;
@@ -20,6 +21,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+//@CrossOrigin(origins = "http://localhost:4200",
+//        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
+//                RequestMethod.DELETE, RequestMethod.OPTIONS},
+//        allowedHeaders = "*",
+//        allowCredentials = "true")
 public class UserAuthController {
 
     private final UserService userService;
@@ -40,19 +46,11 @@ public class UserAuthController {
         return "Welcome, this endpoint is not secure!";
     }
 
-    /**
-     * Handles new user registration.
-     * Validation is now handled by @Valid.
-     */
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody @Valid UserRequestDTO userRequestDTO) {
         userService.registerUser(userRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body("Account created successfully.");
     }
-
-    /**
-     * Authenticates a user and returns a JWT.
-     */
 
     @PostMapping("/login")
     public ResponseEntity<UserAuthResponseDTO> authenticateAndGetToken(@RequestBody @Valid UserAuthRequestDTO authRequestDTO) {
@@ -75,8 +73,8 @@ public class UserAuthController {
     }
 
     @GetMapping("/profile")
-    public ResponseEntity<User> getUserProfile() {
-        User authenticatedUser = userService.getAuthenticatedUser();
+    public ResponseEntity<UserProfileResponseDTO> getUserProfile() {
+        UserProfileResponseDTO authenticatedUser = userService.getAuthenticatedUser();
         return ResponseEntity.ok(authenticatedUser);
     }
 }

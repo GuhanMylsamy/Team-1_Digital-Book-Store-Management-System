@@ -14,6 +14,11 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/cart")
+@CrossOrigin(origins = "http://localhost:4200",
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
+                RequestMethod.DELETE, RequestMethod.OPTIONS},
+        allowedHeaders = "*",
+        allowCredentials = "true")
 public class CartController {
     private final CartService cartService;
 

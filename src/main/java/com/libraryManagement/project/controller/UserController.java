@@ -15,6 +15,11 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1/users")
+@CrossOrigin(origins = "http://localhost:4200",
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
+                RequestMethod.DELETE, RequestMethod.OPTIONS},
+        allowedHeaders = "*",
+        allowCredentials = "true")
 public class UserController {
 
     private final UserService userService;
@@ -23,12 +28,8 @@ public class UserController {
         this.userService = userService;
     }
 
-    /**
-      [ADMIN] Gets a specific user by their ID.
-     */
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/{userId}")
-
     public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long userId) {
         User user = userService.getUserById(userId);
 
@@ -40,9 +41,6 @@ public class UserController {
         return ResponseEntity.ok(responseDTO);
     }
 
-    /**
-       [ADMIN] Gets a list of all customers.
-     */
     @GetMapping("/all")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<UserResponseDTO>> getAllCustomers() {
@@ -57,24 +55,13 @@ public class UserController {
         return ResponseEntity.ok(responseDTOs);
     }
 
-    /**
-       [USER/ADMIN] Gets the profile of the currently logged-in user.
-     */
     @GetMapping("/profile")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public ResponseEntity<UserProfileResponseDTO> getUserProfile() {
-        User user = userService.getAuthenticatedUser();
-        UserProfileResponseDTO profile = new UserProfileResponseDTO(
-                user.getUserId(),
-                user.getFullName(),
-                user.getEmail()
-        );
-        return ResponseEntity.ok(profile);
+        UserProfileResponseDTO user = userService.getAuthenticatedUser();
+        return ResponseEntity.ok(user);
     }
 
-    /**
-       [USER/ADMIN] Updates the profile of the currently logged-in user.
-     */
     @PutMapping("/profile/update")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public ResponseEntity<String> updateUserProfile(@RequestBody @Valid UserUpdateDTO userUpdateDTO) {
@@ -83,9 +70,6 @@ public class UserController {
         return ResponseEntity.ok("User profile updated successfully.");
     }
 
-    /**
-       [ADMIN] Deletes a user by their ID.
-     */
     @DeleteMapping("/{userId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> deleteUserAsAdmin(@PathVariable Long userId) {
@@ -93,11 +77,8 @@ public class UserController {
         return ResponseEntity.ok("User deleted successfully by admin.");
     }
 
-    /**
-       [USER] Allows a user to delete their own account.
-     */
     @DeleteMapping("/deleteProfile")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')") // ADDED hasAnyAuthority
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public ResponseEntity<String> deleteOwnAccount() {
         Long currentUserId = userService.getAuthenticatedUser().getUserId();
         userService.deleteUser(currentUserId);

@@ -13,6 +13,11 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/inventory")
 @PreAuthorize("hasAuthority('ADMIN')")
+@CrossOrigin(origins = "http://localhost:4200",
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
+                RequestMethod.DELETE, RequestMethod.OPTIONS},
+        allowedHeaders = "*",
+        allowCredentials = "true")
 public class InventoryController {
     private final InventoryServiceImpl inventoryService;
 
@@ -30,9 +35,9 @@ public class InventoryController {
         return ResponseEntity.ok(inventoryService.getInventoryById(id));
     }
 
-    @PutMapping("/update-stock/{bookId}")
-    public ResponseEntity<Map<String,String>> updateStockQuantity(@PathVariable Long bookId, @RequestBody InventoryRequestDTO requestDTO) {
-        inventoryService.updateStockQuantity(bookId, requestDTO);
+    @PutMapping("/update-stock")
+    public ResponseEntity<Map<String,String>> updateStockQuantity(@RequestBody InventoryRequestDTO requestDTO) {
+        inventoryService.updateStockQuantity(requestDTO.getBookId(), requestDTO);
         return ResponseEntity.ok(Map.of("message", "Inventory stocks updated successfully!"));
     }
     @GetMapping("/low-stock-alerts")

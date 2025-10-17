@@ -3,8 +3,8 @@
 -- 1. Independent Tables: users, authors, categories
 -- 👤 USERS
 INSERT INTO users (user_id, email, full_name, password, role) VALUES
-(1, 'alice@example.com', 'Alice Sharma', 'pass123', 'ADMIN'),
-(2, 'rahul@example.com', 'Rahul Verma', 'pass456', 'ADMIN'),
+(1, 'alice@example.com', 'Alice Sharma', 'pass123@', 'USER'),
+(2, 'rahul@example.com', 'Rahul Verma', 'pass456@', 'USER'),
 (3, 'user@example.com', 'User', 'pass', 'USER'),
 (4, 'priya.patel@example.com', 'Priya Patel', 'priya@24', 'USER'),
 (5, 'vikram.singh@example.com', 'Vikram Singh', 'vikram#s', 'USER'),
@@ -52,10 +52,10 @@ INSERT INTO cart (cart_id, created_at, updated_at, user_id) VALUES (2, CURRENT_T
 
 -- 3. Tables with multiple dependencies
 -- 🧾 INVENTORY (depends on books)
-INSERT INTO inventory (id, book_id, stock_quantity) VALUES (1, 1, 200);
-INSERT INTO inventory (id, book_id, stock_quantity) VALUES (2, 2, 150);
-INSERT INTO inventory (id, book_id, stock_quantity) VALUES (3, 3, 100);
-INSERT INTO inventory (id, book_id, stock_quantity) VALUES (4, 4, 250);
+INSERT INTO inventory (id, book_id, stock_quantity) VALUES (1, 1, 20);
+INSERT INTO inventory (id, book_id, stock_quantity) VALUES (2, 2, 15);
+INSERT INTO inventory (id, book_id, stock_quantity) VALUES (3, 3, 10);
+INSERT INTO inventory (id, book_id, stock_quantity) VALUES (4, 4, 25);
 
 -- 🧺 CART ITEMS (depends on carts, books)
 INSERT INTO cart_items (cart_item_id, quantity, book_id, cart_id) VALUES (1, 2, 1, 1);
