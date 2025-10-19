@@ -144,7 +144,7 @@ public class OrderServiceImpl implements OrderService {
         ShippingAddress address = shippingAddressRepository.findById(buyNowRequestDTO.getAddressId())
                 .orElseThrow(() -> new ResourceNotFoundException("Address does not exist"));
 
-        Book book = bookRepository.findById(buyNowRequestDTO.getAddressId())
+        Book book = bookRepository.findById(buyNowRequestDTO.getBookId())
                 .orElseThrow(() -> new ResourceNotFoundException("Book does not exist"));
 
         int quantity = buyNowRequestDTO.getQuantity();
@@ -232,7 +232,28 @@ public class OrderServiceImpl implements OrderService {
         return ordersRepository.findAll();
     }
 
-    public List<OrderItems> getOrdersByUserId(Long userId) {
-        return orderItemsRepository.findAllByUserId(userId);
+    @Override
+    public List<OrderItemResponseDTO> getOrdersByUserId(Long userId) {
+        // 1. Fetch all OrderItems entities for the user.
+        List<OrderItems> orderItems = orderItemsRepository.findAllByUserId(userId);
+
+        // 2. Map each OrderItems entity to the corresponding DTO.
+        return orderItems.stream()
+                .map(this::mapToOrderItemResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * ✨ FIX: This is the correct helper method.
+     * It takes an 'OrderItems' object and returns the 'OrderItemResponseDTO'.
+     */
+    private OrderItemResponseDTO mapToOrderItemResponseDTO(OrderItems item) {
+        return new OrderItemResponseDTO(
+                item.getOrder().getOrderId(),     // The ID of the order item line
+                item.getBook().getBookId(), // The ID of the book
+                item.getBook().getTitle(),  // The name of the book
+                item.getQuantity(),
+                item.getUnitPrice()
+        );
     }
 }

@@ -9,6 +9,7 @@ import lombok.ToString;
 @Data
 @Table(name = "order_items")
 @ToString
+
 public class OrderItems {
 
     @Id
@@ -31,4 +32,7 @@ public class OrderItems {
     @JoinColumn(name = "book_id")
     @JsonBackReference
     private Book book;
+
+
+
 }
