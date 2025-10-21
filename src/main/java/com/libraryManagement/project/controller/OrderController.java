@@ -34,7 +34,7 @@ public class OrderController {
         this.userService = userService;
     }
 
-    @PostMapping("/addToCart")
+    @PostMapping("/placeOrder")
     public ResponseEntity<OrderResponseDTO> placeOrder(@RequestBody OrderRequestDTO orderRequestDTO){
         OrderResponseDTO orderResponseDTO = orderService.placeOrder(orderRequestDTO);
         return new ResponseEntity<>(orderResponseDTO, HttpStatus.CREATED);
