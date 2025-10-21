@@ -41,11 +41,10 @@ INSERT INTO shipping_address (shipping_id, address_line1, address_line2, city, c
 INSERT INTO shipping_address (shipping_id, address_line1, address_line2, city, country, full_name, phone, postal_code, state, user_id) VALUES (2, '456 Anna Nagar', 'Opposite Park', 'Chennai', 'India', 'Rahul Verma', '9123456780', '600040', 'TN', 2);
 
 -- 📚 BOOKS (depends on authors, categories)
-INSERT INTO books (book_id, title, author_id, category_id, price, stock_quantity, active, image_url) VALUES (1, 'Spring Boot in Action', 1, 1, 499.99, 20, TRUE, 'springboot.jpg');
-INSERT INTO books (book_id, title, author_id, category_id, price, stock_quantity, active, image_url) VALUES (2, 'Effective Java', 2, 1, 599.00, 15, TRUE, 'effectivejava.jpg');
-INSERT INTO books (book_id, title, author_id, category_id, price, stock_quantity, active, image_url) VALUES (3, 'Clean Code', 3, 1, 450.50, 10, TRUE, 'cleancode.jpg');
-INSERT INTO books (book_id, title, author_id, category_id, price, stock_quantity, active, image_url) VALUES (4, 'Design Patterns', 3, 2, 399.99, 25, TRUE, 'designpatterns.jpg');
-
+INSERT INTO books (book_id, title, author_id, category_id, price, stock_quantity, active, image_url) VALUES (1, 'Spring Boot in Action', 1, 1, 499.99, 20, TRUE, 'https://tse4.mm.bing.net/th/id/OIP.8SUuB94KTAUHM1E1OUYdlwAAAA?w=138&h=180&c=7&r=0&o=7&cb=12&dpr=1.3&pid=1.7&rm=3');
+INSERT INTO books (book_id, title, author_id, category_id, price, stock_quantity, active, image_url) VALUES (2, 'Effective Java', 2, 1, 599.00, 15, TRUE, 'https://i1.wp.com/images-na.ssl-images-amazon.com/images/I/81+MJt1bXgL.jpg?ssl=1');
+INSERT INTO books (book_id, title, author_id, category_id, price, stock_quantity, active, image_url) VALUES (3, 'Clean Code', 3, 1, 450.50, 10, TRUE, 'https://thvnext.bing.com/th/id/OIP.Mk3wjcd9tPr13ybOjSkQTwHaJ3?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3');
+INSERT INTO books (book_id, title, author_id, category_id, price, stock_quantity, active, image_url) VALUES (4, 'Design Patterns', 3, 2, 399.99, 25, TRUE, 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1688419087i/131946966.jpg');
 -- 🛒 CARTS (depends on users)
 INSERT INTO cart (cart_id, created_at, updated_at, user_id) VALUES (1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1);
 INSERT INTO cart (cart_id, created_at, updated_at, user_id) VALUES (2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2);
