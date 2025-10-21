@@ -1,6 +1,7 @@
 package com.libraryManagement.project.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.mapping.Join;
@@ -8,6 +9,7 @@ import org.hibernate.mapping.Join;
 @Entity
 @Table(name = "shipping_address")
 @Data
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class ShippingAddress {
 
     @Id

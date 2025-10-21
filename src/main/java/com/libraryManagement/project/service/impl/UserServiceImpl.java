@@ -2,11 +2,14 @@ package com.libraryManagement.project.service.impl;
 
 import com.libraryManagement.project.dto.requestDTO.UserRequestDTO;
 import com.libraryManagement.project.dto.requestDTO.UserUpdateDTO;
+import com.libraryManagement.project.dto.responseDTO.OrderResponseDTO;
 import com.libraryManagement.project.dto.responseDTO.UserProfileResponseDTO;
+import com.libraryManagement.project.entity.Order;
 import com.libraryManagement.project.entity.User;
 import com.libraryManagement.project.enums.Role;
 import com.libraryManagement.project.exception.ResourceNotFoundException;
 import com.libraryManagement.project.exception.UserAlreadyExistsException;
+import com.libraryManagement.project.repository.OrdersRepository;
 import com.libraryManagement.project.repository.UserRepository;
 import com.libraryManagement.project.security.CustomerUserDetailsService;
 import com.libraryManagement.project.service.UserService;
@@ -23,16 +26,19 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final OrdersRepository ordersRepository;
 
-    public UserServiceImpl(UserRepository userRepository,@Lazy PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder, OrdersRepository ordersRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.ordersRepository = ordersRepository;
     }
 
     @Override
@@ -80,11 +86,11 @@ public class UserServiceImpl implements UserService {
 
         return UserProfileResponseDTO.builder()
                 .userId(userInfo.getUserId())
-                .orders(userInfo.getOrders())
-                .addresses(userInfo.getAddresses())
                 .role(userInfo.getRole())
                 .fullName(userInfo.getFullName())
                 .email(userInfo.getEmail())
+                .addresses(userInfo.getAddresses())
+                .orders(userInfo.getOrders().stream().toList())
                 .build();
     }
 
