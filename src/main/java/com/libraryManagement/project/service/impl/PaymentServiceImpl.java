@@ -1,11 +1,12 @@
 package com.libraryManagement.project.service.impl;
 
 import com.libraryManagement.project.constants.PaymentConstants;
+import com.libraryManagement.project.dto.requestDTO.PaymentReqDTO;
 import com.libraryManagement.project.dto.requestDTO.PaymentRequestDTO;
+import com.libraryManagement.project.dto.responseDTO.PaymentResDTO;
 import com.libraryManagement.project.dto.responseDTO.PaymentResponseDTO;
 import com.libraryManagement.project.entity.Order;
 import com.libraryManagement.project.entity.Payments;
-import com.libraryManagement.project.entity.User;
 import com.libraryManagement.project.enums.PaymentStatus;
 import com.libraryManagement.project.exception.MalpracticeException;
 import com.libraryManagement.project.exception.ResourceNotFoundException;
@@ -63,6 +64,36 @@ public class PaymentServiceImpl {
                 .build();
 
 
+    }
+
+    public PaymentResDTO validatePayRequest(Long userId, PaymentReqDTO paymentRequestDTO){
+        if(!userRepository.existsById(userId)){
+            throw new ResourceNotFoundException("No user exists");
+        }
+
+        Order order = ordersRepository.findById(paymentRequestDTO.getOrderId()).orElseThrow(
+                () -> new ResourceNotFoundException("No order found"));
+
+        if(order.getTotalAmount() != paymentRequestDTO.getAmount()){
+            throw new MalpracticeException("Order and Payment amounts different");
+        }
+
+        Payments payment = new Payments();
+        payment.setAmount(paymentRequestDTO.getAmount());
+        payment.setType(paymentRequestDTO.getType());
+        payment.setTransactionId(paymentRequestDTO.getTransactionId());
+        payment.setIdentifier(UUID.randomUUID().toString());
+        payment.setOrder(order);
+        payment.setStatus(paymentRequestDTO.getStatus());
+
+        Payments savedPayment = paymentsRepository.save(payment);
+
+        return PaymentResDTO.builder()
+                .paymentId(savedPayment.getPaymentId())
+                .status(savedPayment.getStatus())
+                .transactionId(savedPayment.getTransactionId())
+                .orderId(savedPayment.getOrder().getOrderId())
+                .build();
     }
 
 }

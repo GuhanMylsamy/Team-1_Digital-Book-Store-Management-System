@@ -18,6 +18,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -50,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
 
         //Fetch User, Cart, ShippingAddress Object from database using their IDs
 
-        User user = userRepository.findById(SecurityUtil.getCurrentUserId())
+        User user = userRepository.findById(Objects.requireNonNull(SecurityUtil.getCurrentUserId()))
                 .orElseThrow(() -> new ResourceNotFoundException("User does not exist"));
 
         Cart cart = cartRepository.findById(orderRequestDTO.getCartId())
@@ -81,6 +82,9 @@ public class OrderServiceImpl implements OrderService {
         totalAmount = cartItems.stream()
                 .mapToDouble(cartItem -> cartItem.getBook().getPrice() * cartItem.getQuantity())
                 .sum();
+
+        //calculate gst
+        totalAmount = totalAmount + (totalAmount * 0.18);
 
         //Mapping cartItems to orderItems
         orderItems = cartItems.stream()
