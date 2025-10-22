@@ -43,6 +43,12 @@ public class ReviewServiceImpl implements ReviewService {
         if(review.getContent() == null) {
             throw new IllegalArgumentException("Comment cannot be Empty");
         }
+        boolean reviewExists = reviewRepository.existsByUserAndBook(review.getUser(), review.getBook());
+
+        if (reviewExists) {
+            // This specific error message will be sent to the frontend
+            throw new IllegalStateException("You have already submitted a review for this book.");
+        }
         //SToring and saving contents here
         Review savedReview = reviewRepository.save(review);
         return ReviewResponseDTO.reviewResponseDTOMapper(savedReview);

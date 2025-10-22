@@ -1,6 +1,7 @@
 package com.libraryManagement.project.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.libraryManagement.project.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -12,6 +13,7 @@ import java.util.List;
 @Data
 @Table(name = "orders")
 @ToString(exclude = {"orderItems","payments"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Order {
 
     @Id
