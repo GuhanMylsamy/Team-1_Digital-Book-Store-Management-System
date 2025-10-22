@@ -5,6 +5,7 @@ import com.libraryManagement.project.security.JwtAuthenticationFilter;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -48,14 +49,16 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(request -> {
                 CorsConfiguration config = new CorsConfiguration();
                 config.setAllowedOrigins(List.of("http://localhost:4200"));
-                config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
-                config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+                config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE","OPTIONS", "PATCH"));
+                config.setAllowedHeaders(List.of("Authorization", "Content-Type","x-auth-token"));
+                config.setAllowCredentials(true);
                 return config;
                 }))
                 .csrf( csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         // Your public endpoints, including Swagger UI
                         .requestMatchers(
+                                "/**",
                                 "/api/v1/auth/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
