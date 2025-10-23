@@ -33,9 +33,10 @@ public class OrderServiceImpl implements OrderService {
     private final ShippingAddressRepository shippingAddressRepository;
     private final BookRepository bookRepository;
     private final InventoryRepository inventoryRepository;
+    private final ReviewRepository reviewRepository;
 
     @Autowired
-    public OrderServiceImpl(UserRepository userRepository, CartRepository cartRepository, CartItemsRepository cartItemsRepository, OrdersRepository ordersRepository, OrderItemsRepository orderItemsRepository, ShippingAddressRepository shippingAddressRepository, BookRepository bookRepository, InventoryRepository inventoryRepository) {
+    public OrderServiceImpl(UserRepository userRepository, CartRepository cartRepository, CartItemsRepository cartItemsRepository, OrdersRepository ordersRepository, OrderItemsRepository orderItemsRepository, ShippingAddressRepository shippingAddressRepository, BookRepository bookRepository, InventoryRepository inventoryRepository, ReviewRepository reviewRepository) {
         this.userRepository = userRepository;
         this.cartRepository = cartRepository;
         this.cartItemsRepository = cartItemsRepository;
@@ -44,6 +45,7 @@ public class OrderServiceImpl implements OrderService {
         this.shippingAddressRepository = shippingAddressRepository;
         this.bookRepository = bookRepository;
         this.inventoryRepository = inventoryRepository;
+        this.reviewRepository = reviewRepository;
     }
 
     @Override
@@ -133,7 +135,7 @@ public class OrderServiceImpl implements OrderService {
 
         return mapToOrderResponseDTO(order,orderItems);
 
-        
+
 
     }
 
@@ -241,7 +243,6 @@ public class OrderServiceImpl implements OrderService {
         // 1. Fetch all OrderItems entities for the user.
         List<OrderItems> orderItems = orderItemsRepository.findAllByUserId(userId);
 
-        // 2. Map each OrderItems entity to the corresponding DTO.
         return orderItems.stream()
                 .map(this::mapToOrderItemResponseDTO)
                 .collect(Collectors.toList());
@@ -252,12 +253,14 @@ public class OrderServiceImpl implements OrderService {
      * It takes an 'OrderItems' object and returns the 'OrderItemResponseDTO'.
      */
     private OrderItemResponseDTO mapToOrderItemResponseDTO(OrderItems item) {
+        boolean hasReviewed = reviewRepository.existsByUserAndBook(item.getOrder().getUser(), item.getBook());
         return new OrderItemResponseDTO(
-                item.getOrder().getOrderId(),     // The ID of the order item line
+                item.getItemId(),     // The ID of the order item line
                 item.getBook().getBookId(), // The ID of the book
                 item.getBook().getTitle(),  // The name of the book
                 item.getQuantity(),
-                item.getUnitPrice()
+                item.getUnitPrice(),
+                hasReviewed
         );
     }
 }

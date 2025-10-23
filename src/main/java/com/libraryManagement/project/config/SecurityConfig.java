@@ -57,6 +57,7 @@ public class SecurityConfig {
                 .csrf( csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         // Your public endpoints, including Swagger UI
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(
                                 "/**",
                                 "/api/v1/auth/**",
@@ -64,7 +65,8 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
                                 "/api/v1/books/**",
-                                "/api/v1/review/**"
+                                "/api/v1/review/**",
+                                "/api/v1/orders/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
