@@ -1,6 +1,8 @@
 package com.libraryManagement.project.controller;
 
+import com.libraryManagement.project.dto.requestDTO.PaymentReqDTO;
 import com.libraryManagement.project.dto.requestDTO.PaymentRequestDTO;
+import com.libraryManagement.project.dto.responseDTO.PaymentResDTO;
 import com.libraryManagement.project.dto.responseDTO.PaymentResponseDTO;
 import com.libraryManagement.project.entity.Payments;
 import com.libraryManagement.project.service.PaymentService;
@@ -8,6 +10,7 @@ import com.libraryManagement.project.service.impl.PaymentServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,7 +29,14 @@ public class PaymentController {
     @PostMapping("/validate")
     public ResponseEntity<PaymentResponseDTO> validatePayment(@RequestBody PaymentRequestDTO paymentRequestDTO, @RequestHeader Long userId){
         PaymentResponseDTO paymentResponseDTO = paymentService.validatePayment(userId,paymentRequestDTO);
-        System.out.println(paymentRequestDTO);
         return new ResponseEntity<>(paymentResponseDTO, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    @PostMapping("/user/{userId}/validate")
+    public ResponseEntity<PaymentResDTO> validatePayRequest(@RequestBody PaymentReqDTO paymentRequestDTO, @PathVariable Long userId){
+        System.out.println(paymentRequestDTO);
+        PaymentResDTO paymentResponseDTO = paymentService.validatePayRequest(userId,paymentRequestDTO);
+        return new ResponseEntity<>(paymentResponseDTO,HttpStatus.OK);
     }
 }
