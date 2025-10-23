@@ -14,5 +14,6 @@ public class OrderItemResponseDTO {
     private String itemName;
     private int quantity;
     private double price;
+    private boolean isReviewed;
 
 }

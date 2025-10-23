@@ -61,6 +61,15 @@ public class OrderController {
         return ResponseEntity.ok(userOrders);
     }
 
+    // This is the new endpoint your frontend needs to call
+    @GetMapping("/my-order-items")
+    public ResponseEntity<List<OrderItemResponseDTO>> getMyOrders() {
+        Long userId = SecurityUtil.getCurrentUserId();
+        // This is your existing method with all the correct logic!
+        List<OrderItemResponseDTO> orderItems = orderService.getOrdersByUserId(userId);
+        return ResponseEntity.ok(orderItems);
+    }
+
 
 
 

@@ -5,6 +5,7 @@ import com.libraryManagement.project.security.JwtAuthenticationFilter;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -50,18 +51,21 @@ public class SecurityConfig {
                 config.setAllowedOrigins(List.of("http://localhost:4200"));
                 config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
                 config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+                config.setAllowCredentials(true);
                 return config;
                 }))
                 .csrf( csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         // Your public endpoints, including Swagger UI
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(
                                 "/api/v1/auth/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
                                 "/api/v1/books/**",
-                                "/api/v1/review/**"
+                                "/api/v1/review/**",
+                                "/api/v1/orders/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
